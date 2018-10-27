@@ -5,19 +5,13 @@ url = 'https://hack-api.herokuapp.com/trashkan/1/status'
 req = urllib.request.Request(url)
 
 #led = 21
-led = {2,3,4,17,27,22,10,9,11,5,6,13}
+led = [22, 10, 9, 11, 5, 6, 13, 2, 3, 4, 17, 27]
+#[2,3,4,17,27,22,10,9,11,5,6,13]
 
 
 GPIO.setmode(GPIO.BCM)
 for i in led:
     GPIO.setup(i, GPIO.OUT)
-
-while True:
-    for i in led:
-        print(i)
-        GPIO.output(i, GPIO.HIGH)
-        time.sleep(4)
-        GPIO.output(i, GPIO.LOW)
 
 def blink():
     print("blink start")
