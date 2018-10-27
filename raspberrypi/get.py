@@ -25,6 +25,7 @@ def blink():
     
 th = threading.Thread(name="bl", target=blink, args=())
 th.start()
+
 try:
     while True:
         with urllib.request.urlopen(req)as res:
@@ -32,6 +33,7 @@ try:
             print(body)
         if body == 1 and threading.active_count() <= 1:
             th.start()
+        time.sleep(1)
 
 except urllib.error.URLError as err:
     print(err.reason)
