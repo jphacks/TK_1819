@@ -7,6 +7,9 @@ url = 'https://hack-api.herokuapp.com/trashkan/1/status'
 req = urllib.request.Request(url)
 
 led = 21
+
+GPIO.cleanup()
+
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(led, GPIO.OUT)
 
