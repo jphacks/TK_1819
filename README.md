@@ -12,7 +12,7 @@
 ### 製品説明（具体的な製品の説明）
 ごみUpはゴミ箱に近づくとLINE BOTを通じて、そのことを知らせてくれます。
 <div style="text-align:center">
-![ごみUp](linebotQR.png "QRコード")
+<img src="linebotQR.png"  alt="LINEBOT QRコード">
 </div>
 <br />
 ゴミ箱にはLINE Beaconが設置されており、簡単なIoTデバイスも設置することができます。例えば、ゴミ箱にLEDを設置しておけば、ユーザが近づいたときにLEDを明滅させて、その位置をわかり安く示してくれます。
