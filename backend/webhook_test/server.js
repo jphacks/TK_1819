@@ -12,6 +12,7 @@ var bot = lb.Client({
 });
 app.use(bot.webhook('/webhook'));
 bot.on(lb.Events.MESSAGE, function(replyToken, message){
+        console.log("piyo");
     bot.replyTextMessage(replyToken, 'hello world!').then(function (data) {
         console.log("hoge");
     }).catch(function(error){
