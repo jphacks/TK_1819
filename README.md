@@ -50,6 +50,7 @@
 * Python
 * LINE BOT
 * heroku
+* now
 * Google Map API
 
 #### デバイス
