@@ -1,7 +1,3 @@
-<div style="display: inline; text-align: center;">
-<img src="icons/gomi1.svg" width=150px height=150px alt="ごみicon">
-</div>
-
 # ごみUp
 
 [![Product Name](image.png)](https://www.youtube.com/watch?v=G5rULR53uMk)
@@ -15,9 +11,9 @@
 
 ### 製品説明（具体的な製品の説明）
 ごみUpはゴミ箱に近づくとLINE BOTを通じて、そのことを知らせてくれます。
-<div style="text-align:center">
-<img src="linebotQR.png"  alt="LINEBOT QRコード">
-</div>
+
+|![](linebotQR.png)|![](icons/gomi1.svg)|
+
 ゴミ箱にはLINE Beaconが設置されており、簡単なIoTデバイスも設置することができます。例えば、ゴミ箱にLEDを設置しておけば、ユーザが近づいたときにLEDを明滅させて、その位置をわかり安く示してくれます。
 
 ゴミをゴミ箱に捨て、その写真をLINE BOTに送ることや、ゴミ箱がいっぱいになったことをLINE BOTを通じて知らせることで、ユーザにポイントが付与されます。ポイントの高いユーザは、ゴミ箱から大きな歓迎を受けるでしょう。
