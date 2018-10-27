@@ -16,7 +16,7 @@ while True:
     for i in led:
         print(i)
         GPIO.output(i, GPIO.HIGH)
-        time.sleep(5)
+        time.sleep(4)
         GPIO.output(i, GPIO.LOW)
 
 def blink():
