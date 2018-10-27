@@ -12,6 +12,13 @@ GPIO.setmode(GPIO.BCM)
 for i in led:
     GPIO.setup(i, GPIO.OUT)
 
+while True:
+    for i in led:
+        print(i)
+        GPIO.output(i, GPIO.HIGH)
+        time.sleep(1)
+        GPIO.output(i, GPIO.LOW)
+
 def blink():
     print("blink start")
     for i in range(10):
