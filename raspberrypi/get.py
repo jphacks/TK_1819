@@ -1,8 +1,6 @@
 import RPi.GPIO as GPIO
 import urllib.request
 import time
-import threading
-
 url = 'https://hack-api.herokuapp.com/trashkan/1/status'
 req = urllib.request.Request(url)
 
@@ -22,19 +20,15 @@ def blink():
             time.sleep(0.1)
             GPIO.output(j, GPIO.LOW)
     print("blink end")
-    
-th = threading.Thread(name="bl", target=blink, args=())
-th.start()
 
 try:
     while True:
         with urllib.request.urlopen(req)as res:
             body = int(res.read())
             print(body)
-        if body == 1 and threading.active_count() <= 1:
-            th.start()
+        if body == 1:
+            blink()
         time.sleep(1)
-
 except urllib.error.URLError as err:
     print(err.reason)
     GPIO.cleanup()
