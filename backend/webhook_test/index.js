@@ -8,12 +8,19 @@ const app = express()
 let channelSecret_ENV = process.env.CHANNEL_SECRET;
 let channelAccessToken_ENV = process.env.CHANNEL_ACCESSTOKEN;
 
+var port = process.env.PORT || 1337;
+
 const config = {
   channelAccessToken: channelAccessToken_ENV,
   channelSecret: channelSecret_ENV
 }
 
 app.use(middleware(config))
+
+app.get('/', (req, res) => {
+  res.send("Hello Azure!");
+  console.log('hogegege')
+})
 
 app.post('/webhook', (req, res) => {
   res.json(req.body.events) // req.body will be webhook event object
@@ -31,4 +38,4 @@ app.use((err, req, res, next) => {
   next(err) // will throw default 500
 })
 
-app.listen(443)
+app.listen(port)

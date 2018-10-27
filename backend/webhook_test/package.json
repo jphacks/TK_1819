@@ -1,6 +1,11 @@
 {
   "requires": true,
   "lockfileVersion": 1,
+  "engines" : { "node" : "8.11.1" },
+  "scripts": {
+    "start": "node index.js",
+    "install": "npm install"
+  },
   "dependencies": {
     "@line/bot-sdk": "^6.3.0",
     "accepts": {
