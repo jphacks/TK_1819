@@ -12,6 +12,7 @@ led = [22, 10, 9, 11, 5, 6, 13, 2, 3, 4, 17, 27]
 GPIO.setmode(GPIO.BCM)
 for i in led:
     GPIO.setup(i, GPIO.OUT)
+    GPIO.output(i, GPIO.LOW)
 
 def blink():
     print("blink start")
