@@ -9,7 +9,7 @@ let channelSecret_ENV = process.env.CHANNEL_SECRET;
 let channelAccessToken_ENV = process.env.CHANNEL_ACCESSTOKEN;
 
 const config = {
-  channelAccessToken: channelAccessToken,
+  channelAccessToken: channelAccessToken_ENV,
   channelSecret: channelSecret_ENV
 }
 
