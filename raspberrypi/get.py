@@ -3,7 +3,7 @@ import urllib.request
 import time
 import threading
 
-url = 'https://'
+url = 'https://hack-api.herokuapp.com/trashkan/1/status'
 req = urllib.request.Request(url)
 
 led = 21
@@ -24,7 +24,7 @@ th = threading.Thread(name="bl", target=blink, args=())
 while True:
     try:
         with urllib.request.urlopen(req)as res:
-            body = res.read().int()
+            body = int(res.read())
             print(body)
     except urllib.error.URLError as err:
         print(err.reason)
