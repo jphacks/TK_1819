@@ -6,21 +6,25 @@ import threading
 url = 'https://hack-api.herokuapp.com/trashkan/1/status'
 req = urllib.request.Request(url)
 
-led = 21
+#led = 21
+led = {2,3,4,17,27,22,10,9,11,5,6,13}
+
 
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(led, GPIO.OUT)
+for i in led:
+    GPIO.setup(i, GPIO.OUT)
 
 def blink():
     print("blink start")
-    for i in range(20):
-        GPIO.output(led, GPIO.HIGH)
-        time.sleep(0.5)
-        GPIO.output(led, GPIO.LOW)
-        time.sleep(0.5)
+    for i in range(10):
+        for j in led:
+            GPIO.output(j, GPIO.HIGH)
+            time.sleep(0.1)
+            GPIO.output(j, GPIO.LOW)
     print("blink end")
     
 th = threading.Thread(name="bl", target=blink, args=())
+th.start()
 try:
     while True:
         with urllib.request.urlopen(req)as res:
