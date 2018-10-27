@@ -8,8 +8,6 @@ req = urllib.request.Request(url)
 
 led = 21
 
-GPIO.cleanup()
-
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(led, GPIO.OUT)
 
@@ -23,17 +21,19 @@ def blink():
     print("blink end")
     
 th = threading.Thread(name="bl", target=blink, args=())
-
-while True:
-    try:
+try:
+    while True:
         with urllib.request.urlopen(req)as res:
             body = int(res.read())
             print(body)
-    except urllib.error.URLError as err:
-        print(err.reason)
-    except urllib.error.HTTPError as err:
-        print(err.code)
-    if body == 1 and threading.active_count() <= 1:
-        th.start()
+        if body == 1 and threading.active_count() <= 1:
+            th.start()
 
-GPIO.cleanup()
+except urllib.error.URLError as err:
+    print(err.reason)
+    GPIO.cleanup()
+except urllib.error.HTTPError as err:
+    print(err.code)
+    GPIO.cleanup()
+except:
+    GPIO.cleanup()
