@@ -1,8 +1,8 @@
-# ごみUp
-
-<div style="text-align:center">
-<img src="icons/gomi1.svg" width=500px height=500px alt="ごみicon">
+<div style="display: inline; text-align: center;">
+<img src="icons/gomi1.svg" width=150px height=150px alt="ごみicon">
 </div>
+
+# ごみUp
 
 [![Product Name](image.png)](https://www.youtube.com/watch?v=G5rULR53uMk)
 
