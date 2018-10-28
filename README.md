@@ -1,6 +1,6 @@
 # ごみUp
 
-[![Product Name](image.jpg)](https://youtu.be/29dAB6QgfBE)
+[![Product Name](image.png)](https://youtu.be/29dAB6QgfBE)
 
 ## 製品概要
 ### ごみ×Tech
