@@ -27,6 +27,7 @@
 <img src="gomiup_specification.png"  alt="ごみUp 仕様書">
 </div>
 
+ ![](demo_img.png)
 
 ### 特長
 #### 1. ゴミ箱の少ない日本において、外出時にゴミを持ち歩く時間を少なくできる
