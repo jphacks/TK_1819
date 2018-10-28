@@ -1,23 +1,22 @@
 # ごみUp
 
-<div style="text-align:center">
-<img src="icons/gomi1.svg" width=500px height=500px alt="ごみicon">
-</div>
-
 [![Product Name](image.png)](https://www.youtube.com/watch?v=G5rULR53uMk)
 
 ## 製品概要
-### ごみUp
+### ごみ×Tech
 
 ### 背景（製品開発のきっかけ、課題等）
 日本では、海外に比べてゴミ箱が少なく、ゴミが捨てずらいという問題があります。一方で、東京のポイ捨て事情も深刻です。さらに、東京五輪を控えており、観光客の増加が見込まれるため、これらの問題は深刻さを増すことが予想されます。
-そこで、ごみUpはゴミ箱を見つけるまでの工程をHackすることで、ゴミ箱の捨てずらの軽減とゴミを捨てることの楽しさを向上させます。
+そこで、ごみUpはゴミ箱を見つけるまでの工程をHackすることで、ゴミの捨てずらさの軽減とゴミを捨てることの楽しさを向上させます。
 
 ### 製品説明（具体的な製品の説明）
+
+![](icons/gomi1.svg)
+
 ごみUpはゴミ箱に近づくとLINE BOTを通じて、そのことを知らせてくれます。
-<div style="text-align:center">
-<img src="linebotQR.png"  alt="LINEBOT QRコード">
-</div>
+
+ ![](linebotQR.png)   
+
 ゴミ箱にはLINE Beaconが設置されており、簡単なIoTデバイスも設置することができます。例えば、ゴミ箱にLEDを設置しておけば、ユーザが近づいたときにLEDを明滅させて、その位置をわかり安く示してくれます。
 
 ゴミをゴミ箱に捨て、その写真をLINE BOTに送ることや、ゴミ箱がいっぱいになったことをLINE BOTを通じて知らせることで、ユーザにポイントが付与されます。ポイントの高いユーザは、ゴミ箱から大きな歓迎を受けるでしょう。
@@ -54,6 +53,7 @@
 * Python
 * LINE BOT
 * heroku
+* now
 * Google Map API
 
 #### デバイス
@@ -75,13 +75,16 @@
 - LINEの規約を遵守した
  - 当初想定していたアイデアは規約に反する恐れがあったため、ゴミ箱に捨てました🚮
 - ゴミ箱がいっぱいになったことを検知する機能
+- ユーザポイントを付与する機能
+　　
+  　　
+    
+効果音素材は効果音ラボ様( https://soundeffect-lab.info/ )よりお借りしました。
 
-
-効果音素材は効果音ラボ様(https://soundeffect-lab.info/)よりお借りしました。
 raspberrypi/wav ディレクトリ内に
-・https://soundeffect-lab.info/sound/button/mp3/decision5.mp3
-・https://soundeffect-lab.info/sound/anime/mp3/piano1.mp3
-の2つのファイルをwavに変換し、
-・raspberrypi/wav/decision5.wav
-・raspberrypi/wav/piano1.wav
+- https://soundeffect-lab.info/sound/button/mp3/decision5.mp3
+- https://soundeffect-lab.info/sound/anime/mp3/piano1.mp3　　
+の2つのファイルをwavに変換し、　　
+- raspberrypi/wav/decision5.wav　　
+- raspberrypi/wav/piano1.wav　　
 としてテスト用に使用しました。
