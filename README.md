@@ -77,7 +77,7 @@
 - ゴミ箱がいっぱいになったことを検知する機能
 - ユーザポイントを付与する機能
 
-効果音素材は効果音ラボ様(https://soundeffect-lab.info/)よりお借りしました。
+効果音素材は効果音ラボ様( https://soundeffect-lab.info/ )よりお借りしました。
 raspberrypi/wav ディレクトリ内に
 - https://soundeffect-lab.info/sound/button/mp3/decision5.mp3
 - https://soundeffect-lab.info/sound/anime/mp3/piano1.mp3
