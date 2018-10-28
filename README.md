@@ -94,4 +94,6 @@ raspberrypi/wav ディレクトリ内に
 - raspberrypi/wav/piano1.wav　　
 としてテスト用に使用しました。
 
-![](raspi.jpg)
+<div style="text-align:center">
+<img src="raspi.jpg" height=30% width=30% alt="ごみUp demo">
+</div>
