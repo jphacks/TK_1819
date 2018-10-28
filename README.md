@@ -94,4 +94,4 @@ raspberrypi/wav ディレクトリ内に
 - raspberrypi/wav/piano1.wav　　
 としてテスト用に使用しました。
 
-![](raspi.png)
+![](raspi.jpg)
