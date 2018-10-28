@@ -93,3 +93,5 @@ raspberrypi/wav ディレクトリ内に
 - raspberrypi/wav/decision5.wav　　
 - raspberrypi/wav/piano1.wav　　
 としてテスト用に使用しました。
+
+![](raspi.png)
