@@ -1,6 +1,8 @@
 # ごみUp
 
-[![Product Name](image.png)](https://www.youtube.com/watch?v=G5rULR53uMk)
+## 動画
+
+[![Product Name](S__24109063.jpg)](https://youtu.be/nn_b1aQscYc)
 
 ## 製品概要
 ### ごみ×Tech
@@ -27,6 +29,9 @@
 <img src="gomiup_specification.png"  alt="ごみUp 仕様書">
 </div>
 
+<div style="text-align:center">
+<img src="demo_img.png" height=50% width=50% alt="ごみUp demo">
+</div>
 
 ### 特長
 #### 1. ゴミ箱の少ない日本において、外出時にゴミを持ち歩く時間を少なくできる
@@ -46,6 +51,7 @@
 #### API・データ
 * LINE BOT
 * LINE Beacon
+* NEC 簡単画像認識API
 
 
 #### フレームワーク・ライブラリ・モジュール
@@ -76,6 +82,7 @@
  - 当初想定していたアイデアは規約に反する恐れがあったため、ゴミ箱に捨てました🚮
 - ゴミ箱がいっぱいになったことを検知する機能
 - ユーザポイントを付与する機能
+- ユーザが画像を送信すると、簡単画像認識APIがごみ箱の画像であるかを判定する機構を作った
 　　
   　　
     
@@ -87,4 +94,9 @@ raspberrypi/wav ディレクトリ内に
 の2つのファイルをwavに変換し、　　
 - raspberrypi/wav/decision5.wav　　
 - raspberrypi/wav/piano1.wav　　
+
 としてテスト用に使用しました。
+
+<div style="text-align:center">
+<img src="raspi.jpg" height=30% width=30% alt="ごみUp demo">
+</div>
