@@ -92,6 +92,7 @@ raspberrypi/wav ディレクトリ内に
 の2つのファイルをwavに変換し、　　
 - raspberrypi/wav/decision5.wav　　
 - raspberrypi/wav/piano1.wav　　
+
 としてテスト用に使用しました。
 
 <div style="text-align:center">
