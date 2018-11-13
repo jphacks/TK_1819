@@ -254,6 +254,10 @@ module.exports = {
 const registerNewLineUser = (userId) => {
   const currentUser =  strapi.services.lineuser.search({"userId" : event.source.userId})    
   console.log(currentUser)
+  if (currentUser == []) {
+    console.log("User doesn't exist!!")
+    
+  }
 }
 
 /**
@@ -262,7 +266,7 @@ const registerNewLineUser = (userId) => {
  * @return {resolve}
  */
 
-let followHandler = (event) => {
+const followHandler = (event) => {
   registerNewLineUser(event.source.userId)
   client.pushMessage(event.source.userId, [{
     "text" : 'フォローありがとうございます！これからはゴミ捨てを忘れる心配はありません！',
@@ -276,7 +280,7 @@ let followHandler = (event) => {
  * @return {resolve}
  */
 
-let beaconHandler = (event) => {
+const beaconHandler = (event) => {
   if (event.beacon.type === 'enter'){
     if (user_hash[event.source.userId] == undefined) {
       user_hash[event.source.userId] = {}
@@ -327,7 +331,7 @@ let beaconHandler = (event) => {
  * @return {resolve}
  */
 
-let imageHandler = (event) => {
+const imageHandler = (event) => {
   let image_buf;
   const options = {
     url: `https://api.line.me/v2/bot/message/${event.message.id}/content`,
@@ -380,7 +384,7 @@ let imageHandler = (event) => {
  * @return {resolve}
  */
 
-let chatHandler = (event) => {
+const chatHandler = (event) => {
   if (event.message.text === 'いっぱい' || event.message.text === 'まだ大丈夫' || event.message.text === 'ポイントは？') {
     // level++;
     client.pushMessage(event.source.userId, [{
