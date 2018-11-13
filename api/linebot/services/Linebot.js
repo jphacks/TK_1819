@@ -262,7 +262,7 @@ const registerNewLineUser = (userId) => {
  */
 
 const isUserExist = (userId) => {
-  const currentUser =  strapi.services.lineuser.search({"userId" : userId})    
+  const currentUser = await strapi.services.lineuser.search({"userId" : userId})    
   console.log(currentUser)
   if (currentUser.length > 0) {
     return true
