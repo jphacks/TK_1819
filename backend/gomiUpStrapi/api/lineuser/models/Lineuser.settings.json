@@ -16,6 +16,10 @@
     "score": {
       "default": "",
       "type": "integer"
+    },
+    "trashcan": {
+      "model": "trashcan",
+      "via": "lineusers"
     }
   }
 }

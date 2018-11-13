@@ -40,6 +40,10 @@
       "via": "related",
       "plugin": "upload",
       "required": false
+    },
+    "lineusers": {
+      "collection": "lineuser",
+      "via": "trashcan"
     }
   }
 }
