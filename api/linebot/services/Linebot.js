@@ -280,7 +280,7 @@ const isUserExist = (userId) => {
  */
 
 const followHandler = (event) => {
-  if (isUserExist) {
+  if (isUserExist(event.source.userId)) {
     console.log("I was blocked...")
     client.pushMessage(event.source.userId, [{
       "text" : '再登録ありがとうございます！これからもゴミを捨てましょう！',
