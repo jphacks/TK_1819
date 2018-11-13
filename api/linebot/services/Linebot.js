@@ -1,5 +1,24 @@
 'use strict';
 
+const line = require('@line/bot-sdk');
+const HTTPError = require('@line/bot-sdk').HTTPError;
+const line_middleware = require('@line/bot-sdk').middleware
+const JSONParseError = require('@line/bot-sdk').JSONParseError
+const SignatureValidationFailed = require('@line/bot-sdk').SignatureValidationFailed
+const os = require('os');
+const hostname = os.hostname();
+const request = require('request');
+const http = require('https');
+
+const axios = require('axios');
+const PORT = process.env.PORT || 3000;
+
+const config = {
+    channelAccessToken: process.env.LINE_ACCESS_TOKEN,
+    channelSecret: process.env.LINE_CHANNEL_SECRET
+};
+const client = new line.Client(config);
+
 /**
  * Linebot.js service
  *
