@@ -213,9 +213,15 @@ module.exports = {
       .skip(filters.start)
       .limit(filters.limit)
       .populate(populate);
-  }
+  },
 
   // beaconManager
+  //
+/**
+   * Route and handle each events.
+   *
+   * @return {resolve}
+   */
 
   handleEvent: (event) => {
     if(event.beacon){
