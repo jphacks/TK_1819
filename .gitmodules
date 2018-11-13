@@ -6,4 +6,7 @@
 	url = git@github.com:line/line-simple-beacon.git
 [submodule "frontend/lib/eon"]
 	path = frontend/lib/eon
-	url = https://github.com/pubnub/eon.git
+	url = git@github.com:pubnub/eon.git
+[submodule "beacon/line-simple-beacon"]
+	path = beacon/line-simple-beacon
+	url = git@github.com:line/line-simple-beacon.git
