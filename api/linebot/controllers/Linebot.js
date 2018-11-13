@@ -270,7 +270,12 @@ function handleEvent(event) {
       "text": event.message.text ,
       "type" : 'text'
       }
-    );
+    )
+    .catch((err) => {
+      if (err instanceof HTTPError) {
+        console.error(err.statusCode);
+      }
+    });
   }
   return 0
 }
