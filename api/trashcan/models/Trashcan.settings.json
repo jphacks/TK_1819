@@ -1,0 +1,45 @@
+{
+  "connection": "default",
+  "collectionName": "trashcan",
+  "info": {
+    "name": "trashcan",
+    "description": "Trashcan data"
+  },
+  "options": {
+    "timestamps": true
+  },
+  "attributes": {
+    "name": {
+      "default": "",
+      "type": "string"
+    },
+    "images": {
+      "collection": "file",
+      "via": "related",
+      "plugin": "upload",
+      "required": false
+    },
+    "isFull": {
+      "default": false,
+      "type": "boolean"
+    },
+    "location": {
+      "default": "",
+      "type": "json"
+    },
+    "beaconID": {
+      "default": "",
+      "type": "string"
+    },
+    "requestState": {
+      "default": "",
+      "type": "integer"
+    },
+    "thumbnail": {
+      "model": "file",
+      "via": "related",
+      "plugin": "upload",
+      "required": false
+    }
+  }
+}

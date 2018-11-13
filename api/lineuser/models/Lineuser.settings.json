@@ -1,0 +1,21 @@
+{
+  "connection": "default",
+  "collectionName": "",
+  "info": {
+    "name": "lineuser",
+    "description": "Line user. ID and point will be managed."
+  },
+  "options": {
+    "timestamps": true
+  },
+  "attributes": {
+    "userID": {
+      "default": "",
+      "type": "string"
+    },
+    "score": {
+      "default": "",
+      "type": "integer"
+    }
+  }
+}
