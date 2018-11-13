@@ -1,3 +1,9 @@
 [submodule "backend/hack-api"]
 	path = backend/hack-api
 	url = https://github.com/aronon/hack-api
+[submodule "beacon"]
+	path = beacon
+	url = git@github.com:line/line-simple-beacon.git
+[submodule "frontend/lib/eon"]
+	path = frontend/lib/eon
+	url = https://github.com/pubnub/eon.git

@@ -1,0 +1,60 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/linebots",
+      "handler": "Linebot.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/linebots/count",
+      "handler": "Linebot.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/linebots/:_id",
+      "handler": "Linebot.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/linebots/webhook",
+      "handler": "Linebot.webhook",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/linebots",
+      "handler": "Linebot.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/linebots/:_id",
+      "handler": "Linebot.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/linebots/:_id",
+      "handler": "Linebot.destroy",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

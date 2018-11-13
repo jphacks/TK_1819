@@ -1,0 +1,63 @@
+
+	<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="130" height="130" viewBox="0 0 100 100">
+
+
+		<defs>
+			<linearGradient id="Gradient_2" gradientUnits="userSpaceOnUse" x1="10" y1="83" x2="78" y2="83" spreadMethod="pad">
+<stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.6"/>
+<stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.2"/>
+</linearGradient><linearGradient id="Gradient_3" gradientUnits="userSpaceOnUse" x1="0" y1="60.3" x2="96" y2="60.3" spreadMethod="pad">
+<stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.6"/>
+<stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.2"/>
+</linearGradient><linearGradient id="Gradient_4" gradientUnits="userSpaceOnUse" x1="6" y1="23" x2="92" y2="23" spreadMethod="pad">
+<stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.6"/>
+<stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.2"/>
+</linearGradient><g id="background">
+<path fill="url(#background-gradient)" stroke="none" d=" M 98.1 41.9 L 81.05 12.45 Q 79.1 9.1 75 6.75 70.85 4.35 67.05 4.35 L 32.95 4.35 Q 29.15 4.35 25 6.75 20.9 9.1 18.95 12.45 L 1.9 41.9 Q 0 45.3 0 50 0 54.75 1.9 58.15 L 18.95 87.6 Q 20.9 90.95 25 93.3 29.15 95.7 32.95 95.7 L 67.05 95.7 Q 70.85 95.7 75 93.3 79.1 90.95 81.05 87.6 L 98.1 58.15 Q 100 54.75 100 50 100 45.3 98.1 41.9 Z"/>
+</g><g id="middle-1">
+<path fill="url(#Gradient_2)" stroke="none" d=" M 9.85 71.85 L 17.4 84.9 Q 21.95 83.35 28.15 83.7 35.65 84.2 42.4 87.45 45.05 88.7 48.7 91.1 50.6 92.25 55.5 95.7 L 67.05 95.7 Q 69.7 95.7 72.65 94.5 75.55 93.3 77.85 91.35 77.25 91.15 77.2 91.15 72.45 90.2 66.5 87.7 62.2 85.9 51.2 80.6 36.9 73.7 30.05 71.65 19 68.35 11.6 71.1 10.8 71.35 9.85 71.85 Z"/>
+
+<path fill="url(#Gradient_3)" stroke="none" d=" M 87.15 77.05 L 96.35 61.1 Q 88.65 61.2 80.7 59.05 70.25 56.35 60.4 50 50.2 43.5 34.8 43.1 19.65 42.7 7.3 48.35 3.55 50.1 0.1 52.25 0.5 55.65 1.9 58.15 L 4.3 62.25 Q 13.6 58 24.3 58.85 36.15 59.9 46.65 67.2 56.7 74.15 67.6 76.35 76.35 78.15 87.15 77.05 Z"/>
+
+<path fill="url(#Gradient_4)" stroke="none" d=" M 92.4 32.05 L 81.05 12.45 Q 80.25 11.05 79 9.8 69.9 9.4 60.55 11.25 54.9 12.4 44.7 15.5 35.4 18.25 30.45 19.25 22.25 20.95 14.2 20.7 L 5.85 35.15 Q 11.15 35.7 16.05 35.7 24.9 35.7 34 33.8 39.4 32.65 49 29.75 58.9 26.75 68.5 27.2 78.5 27.65 92.4 32.05 Z"/>
+</g><mask id="mask">
+<path fill="#FFFFFF" stroke="none" d=" M 98.1 41.9 L 81.05 12.45 Q 79.1 9.1 75 6.75 70.85 4.35 67.05 4.35 L 32.95 4.35 Q 29.15 4.35 25 6.75 20.9 9.1 18.95 12.45 L 1.9 41.9 Q 0 45.3 0 50 0 54.75 1.9 58.15 L 18.95 87.6 Q 20.9 90.95 25 93.3 29.15 95.7 32.95 95.7 L 67.05 95.7 Q 70.85 95.7 75 93.3 79.1 90.95 81.05 87.6 L 98.1 58.15 Q 100 54.75 100 50 100 45.3 98.1 41.9 Z"/>
+</mask>
+			
+	<linearGradient id="background-gradient" x1="0" y1="0" y2="1" x2="0" >
+		<stop stop-color="#fdfb58" offset="0%"/>
+		<stop stop-color="#e54630" offset="100%"/>
+	</linearGradient>
+
+			
+			
+			<g transform="translate(-100.00000381469727 -100)" id="picture">
+    <path fill="#fff" d="M153.8 149.8h35.8V194c-9.4 4-20 6-31.6 6-15.4 0-27-4.4-35.2-13-8.4-8.6-12.4-21-12.4-36.8 0-9.8 2-18.6 6-26.2 4-7.6 9.8-13.6 17.4-17.8 7.6-4.2 16.4-6.2 26.2-6.2 10.4 0 20 2 28.4 5.8l-2.8 6.2c-8.4-4-17-5.8-26-5.8-12.8 0-23 4-30.4 11.8-7.6 8-11.2 18.6-11.2 32 0 14.6 3.6 25.6 10.6 33s17.4 11 31.4 11c9 0 16.6-1.2 22.8-3.8V156h-29v-6.2z"/>
+</g>
+			
+		</defs>
+
+		
+
+			<use xlink:href="#background" fill="url(#background-gradient)" />
+
+		<use xlink:href="#middle-1" />
+
+			<g mask="url(#mask)">
+				<g transform="
+				        translate(
+                                50 50
+)
+                            translate(0 0)  scale(0.65)  
+                            translate(
+                                -50 -50
+)">
+						<use xlink:href="#picture"   />
+				</g>
+			</g>
+
+		
+
+
+
+	</svg>

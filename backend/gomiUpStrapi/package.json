@@ -1,0 +1,50 @@
+{
+  "name": "gomiUp",
+  "private": true,
+  "version": "0.1.0",
+  "description": "JPHack app",
+  "main": "./server.js",
+  "scripts": {
+    "setup": "cd admin && npm run setup",
+    "start": "node server.js",
+    "strapi": "node_modules/strapi/bin/strapi.js",
+    "lint": "node_modules/.bin/eslint api/**/*.js config/**/*.js plugins/**/*.js",
+    "postinstall": "node node_modules/strapi/lib/utils/post-install.js"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.1.1",
+    "eslint": "^3.12.2",
+    "eslint-config-airbnb": "^13.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-react": "^6.8.0"
+  },
+  "dependencies": {
+    "@line/bot-sdk": "^6.3.0",
+    "lodash": "4.x.x",
+    "request": "^2.88.0",
+    "strapi": "3.0.0-alpha.14.4.0",
+    "strapi-generate": "^1.6.3",
+    "strapi-hook-mongoose": "3.0.0-alpha.14.4.0"
+  },
+  "author": {
+    "name": "kinoshitashun",
+    "email": "",
+    "url": ""
+  },
+  "maintainers": [
+    {
+      "name": "kinoshitashun",
+      "email": "",
+      "url": ""
+    }
+  ],
+  "strapi": {
+    "packageManager": "npm",
+    "uuid": "e42cb6a8-a42c-4cfb-95e6-f3742147212f"
+  },
+  "engines": {
+    "node": ">= 9.0.0",
+    "npm": ">= 5.0.0"
+  },
+  "license": "MIT"
+}

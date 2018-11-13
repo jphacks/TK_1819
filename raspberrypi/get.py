@@ -2,8 +2,9 @@ import RPi.GPIO as GPIO
 import urllib.request
 import time
 import pygame
+import json
 
-url = 'https://hack-api.herokuapp.com/trashkan/1/status'
+url = 'https://hack-api.herokuapp.com/trashcans/5be705564ce0a041e16fb161/requestState'
 req = urllib.request.Request(url)
 
 led = [22, 10, 9, 11, 5, 6, 13, 2, 3, 4, 17, 27]
@@ -33,10 +34,11 @@ def blink(soundnum):
 try:
     while True:
         with urllib.request.urlopen(req)as res:
-            body = int(res.read())
-            print(body)
-        if body != 0:
-            blink(body)
+            body = json.load(res) 
+            request_state = body["requestState"]
+            print(request_state)
+        if request_state is not 0:
+            blink(request_state)
         time.sleep(1)
 except urllib.error.URLError as err:
     print(err.reason)

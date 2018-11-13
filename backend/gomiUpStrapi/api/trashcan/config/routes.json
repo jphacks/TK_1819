@@ -1,0 +1,60 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/trashcans",
+      "handler": "Trashcan.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/trashcans/count",
+      "handler": "Trashcan.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/trashcans/:_id/:attribute",
+      "handler": "Trashcan.findOneAttribute",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/trashcans/:_id",
+      "handler": "Trashcan.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/trashcans",
+      "handler": "Trashcan.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/trashcans/:_id",
+      "handler": "Trashcan.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/trashcans/:_id",
+      "handler": "Trashcan.destroy",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/lineusers",
+      "handler": "Lineuser.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lineusers/count",
+      "handler": "Lineuser.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lineusers/:_id",
+      "handler": "Lineuser.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lineusers",
+      "handler": "Lineuser.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/lineusers/:_id",
+      "handler": "Lineuser.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/lineusers/:_id",
+      "handler": "Lineuser.destroy",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}
