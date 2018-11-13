@@ -244,19 +244,30 @@ module.exports = {
 };
 
 // helper functions
-
 /**
- * Register New user if not exist.
+ * Register user.
  *
  * @return {int}
  */
 
 const registerNewLineUser = (userId) => {
+  console.log("registration functionality here")
+}
+
+/**
+ * check user exist.
+ *
+ * @return {int}
+ */
+
+const isUserExist = (userId) => {
   const currentUser =  strapi.services.lineuser.search({"userId" : event.source.userId})    
   console.log(currentUser)
-  if (currentUser == []) {
+  if (currentUser.length > 0) {
+    return true
+  } else {
+    return false 
     console.log("User doesn't exist!!")
-    
   }
 }
 
@@ -267,11 +278,20 @@ const registerNewLineUser = (userId) => {
  */
 
 const followHandler = (event) => {
-  registerNewLineUser(event.source.userId)
-  client.pushMessage(event.source.userId, [{
-    "text" : 'フォローありがとうございます！これからはゴミ捨てを忘れる心配はありません！',
-    "type" : 'text'
-  }]);
+  if (isUserExist) {
+    console.log("I was blocked...")
+    client.pushMessage(event.source.userId, [{
+      "text" : '再登録ありがとうございます！これからもゴミを捨てましょう！',
+      "type" : 'text'
+    }]);
+  } else {
+    registerNewLineUser(event.source.userId)
+    client.pushMessage(event.source.userId, [{
+      "text" : 'フォローありがとうございます！これからはゴミ捨てを忘れる心配はありません！',
+      "type" : 'text'
+    }]);
+  }
+  
 }
 
 /**
