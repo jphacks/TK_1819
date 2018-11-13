@@ -122,7 +122,9 @@ module.exports = {
   }
 };
 
-function handleEvent(event) {
+
+
+handleEvent: (event) => {
   if(event.beacon){
     if (event.beacon.type === 'enter'){
       if (user_hash[event.source.userId] == undefined) {
@@ -274,7 +276,7 @@ function handleEvent(event) {
     )
     .catch((err) => {
       if (err instanceof HTTPError) {
-        console.error(err.statusCode);
+        console.error("Request ot Line server went wrong status code:" + err.statusCode);
       }
     });
   }
