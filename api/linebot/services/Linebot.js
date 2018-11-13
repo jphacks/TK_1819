@@ -223,7 +223,7 @@ module.exports = {
 
   handleEvent: (event) => {
     console.log(event);
-    if (event.follow) {
+    if (event.type == 'follow') {
       followHandler(event)
     } else if (event.beacon){
       beaconHandler(event)
