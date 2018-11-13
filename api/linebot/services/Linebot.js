@@ -252,6 +252,7 @@ module.exports = {
 
 const registerNewLineUser = (userId) => {
   console.log("registration functionality here")
+  strapi.services.lineuser.add({"userId" : userId, "score" : 0})
 }
 
 /**
@@ -261,7 +262,7 @@ const registerNewLineUser = (userId) => {
  */
 
 const isUserExist = (userId) => {
-  const currentUser =  strapi.services.lineuser.search({"userId" : event.source.userId})    
+  const currentUser =  strapi.services.lineuser.search({"userId" : userId})    
   console.log(currentUser)
   if (currentUser.length > 0) {
     return true
@@ -291,7 +292,7 @@ const followHandler = (event) => {
       "type" : 'text'
     }]);
   }
-  
+
 }
 
 /**
