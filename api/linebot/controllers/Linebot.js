@@ -43,7 +43,7 @@ module.exports = {
    */
 
   webhook: async (ctx) => {
-    console.log(ctx.request.body);
+    // console.log(ctx.request.body);
 
     Promise
       .all(ctx.request.body.events.map(strapi.services.linebot.handleEvent))

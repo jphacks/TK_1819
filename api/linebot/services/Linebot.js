@@ -222,6 +222,7 @@ module.exports = {
    */
 
   handleEvent: (event) => {
+    console.log(event);
     if (event.follow) {
       followHandler(event)
     } else if (event.beacon){
@@ -248,6 +249,7 @@ module.exports = {
  * @return {resolve}
  */
 let followHandler = (event) => {
+  // let currentUser =  strapi.services.lineuser.search(event.follow.userId)    
   client.pushMessage(event.source.userId, [{
     "text" : 'フォローありがとうございます！これからはゴミ捨てを忘れる心配はありません！',
     "type" : 'text'
