@@ -70,7 +70,7 @@ module.exports = {
         console.log("before then");
         console.log(err);
       })
-      .then((result) => res.json(result))
+      .then((result) => ctx.response.body = result)
       .catch(function (err) {
         console.log( "Something bad happens in webhook call");
         console.log(err);
@@ -272,6 +272,5 @@ function handleEvent(event) {
       }
     );
   }
-
   return 0
 }
