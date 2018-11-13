@@ -225,9 +225,9 @@ module.exports = {
     console.log(event);
     if (event.type == 'follow') {
       followHandler(event)
-    } else if (event.beacon){
+    } else if (event.type == 'beacon'){
       beaconHandler(event)
-    } else if (event.message) {
+    } else if (event.type == 'message') {
       if (event.message.type == 'image') {
         imageHandler(event)
       } else {
@@ -243,21 +243,33 @@ module.exports = {
   }
 };
 
+// helper functions
+
 /**
- * Handle beacon events.
+ * Register New user if not exist.
+ *
+ * @return {int}
+ */
+
+const registerNewLineUser = (userId) => {
+  const currentUser =  strapi.services.lineuser.search({"userId" : event.source.userId})    
+  console.log(currentUser)
+}
+
+/**
+ * Handle follow (& unfollow) events.
  *
  * @return {resolve}
  */
+
 let followHandler = (event) => {
-  // let currentUser =  strapi.services.lineuser.search(event.follow.userId)    
+  registerNewLineUser(event.source.userId)
   client.pushMessage(event.source.userId, [{
     "text" : 'フォローありがとうございます！これからはゴミ捨てを忘れる心配はありません！',
     "type" : 'text'
   }]);
 }
 
-
-// helper functions
 /**
  * Handle beacon events.
  *
