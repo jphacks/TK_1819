@@ -224,17 +224,17 @@ module.exports = {
   handleEvent: (event) => {
     if(event.beacon){
       beaconHandler(event)
-    }
-
-    if (event.message.type != undefined && event.message.type == 'image') {
-      imageHandler(event)
+    } else if (event.message) {
+      if (event.message.type == 'image') {
+        imageHandler(event)
+      } else {
+        chatHandler(event)
+      }
     }
 
     if (event.type !== 'message' || event.message.type !== 'text') {
       return Promise.resolve(null);
     }
-
-    chatHandler(event)
     
     return 0
   }
@@ -247,7 +247,7 @@ module.exports = {
  * @return {resolve}
  */
 
-beaconHandler = (event) => {
+let beaconHandler = (event) => {
   if (event.beacon.type === 'enter'){
     if (user_hash[event.source.userId] == undefined) {
       user_hash[event.source.userId] = {}
@@ -293,12 +293,12 @@ beaconHandler = (event) => {
 }
 
 /**
- * Handle beacon events.
+ * Handle image events.
  *
  * @return {resolve}
  */
 
-imageHandler = (event) => {
+let imageHandler = (event) => {
   let image_buf;
   const options = {
     url: `https://api.line.me/v2/bot/message/${event.message.id}/content`,
@@ -345,7 +345,13 @@ imageHandler = (event) => {
   // });
 }
 
-chatHandler = (event) => {
+/**
+ * Handle chat events.
+ *
+ * @return {resolve}
+ */
+
+let chatHandler = (event) => {
   if (event.message.text === 'いっぱい' || event.message.text === 'まだ大丈夫' || event.message.text === 'ポイントは？') {
     // level++;
     client.pushMessage(event.source.userId, [{
