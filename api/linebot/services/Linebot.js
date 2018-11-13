@@ -222,7 +222,9 @@ module.exports = {
    */
 
   handleEvent: (event) => {
-    if(event.beacon){
+    if (event.follow) {
+      followHandler(event)
+    } else if (event.beacon){
       beaconHandler(event)
     } else if (event.message) {
       if (event.message.type == 'image') {
@@ -235,10 +237,23 @@ module.exports = {
     if (event.type !== 'message' || event.message.type !== 'text') {
       return Promise.resolve(null);
     }
-    
+
     return 0
   }
 };
+
+/**
+ * Handle beacon events.
+ *
+ * @return {resolve}
+ */
+let followHandler = (event) => {
+  client.pushMessage(event.source.userId, [{
+    "text" : 'フォローありがとうございます！これからはゴミ捨てを忘れる心配はありません！',
+    "type" : 'text'
+  }]);
+}
+
 
 // helper functions
 /**
