@@ -262,7 +262,6 @@ const registerNewLineUser = async (userId) => {
  */
 
 const isUserExist = async (userId) => {
-  console.log(Lineuser.attributes)
   const currentUser = await strapi.services.lineuser.search({"userId" : userId})
   console.log(currentUser)
   if (currentUser.length > 0) {
@@ -281,6 +280,7 @@ const isUserExist = async (userId) => {
  */
 
 const followHandler = async (event) => {
+  console.log(Lineuser.attributes)
   if (isUserExist(event.source.userId)) {
     console.log("I was blocked...")
     client.pushMessage(event.source.userId, [{
