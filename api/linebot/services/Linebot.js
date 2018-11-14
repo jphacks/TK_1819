@@ -263,6 +263,7 @@ const registerNewLineUser = async (userId) => {
 
 const isUserExist = async (userId) => {
   const currentUser = await strapi.services.lineuser.search({"userId" : userId})    
+  console.log(Lineuser.attributes)
   console.log(currentUser)
   if (currentUser.length > 0) {
     console.log("User ${userId} already exist!!")
@@ -280,7 +281,7 @@ const isUserExist = async (userId) => {
  */
 
 const followHandler = async (event) => {
-  if (isUserExist(event.source.userId)) {
+  if (await isUserExist(event.source.userId)) {
     console.log("I was blocked...")
     client.pushMessage(event.source.userId, [{
       "text" : '再登録ありがとうございます！これからもゴミを捨てましょう！',
