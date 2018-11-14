@@ -286,7 +286,7 @@ const followHandler = async (event) => {
       "type" : 'text'
     }]);
   } else {
-    registerNewLineUser(event.source.userId)
+    await registerNewLineUser(event.source.userId)
     client.pushMessage(event.source.userId, [{
       "text" : 'フォローありがとうございます！これからはゴミ捨てを忘れる心配はありません！',
       "type" : 'text'
