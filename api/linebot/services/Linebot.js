@@ -250,7 +250,7 @@ module.exports = {
  * @return {int}
  */
 
-const registerNewLineUser = (userId) => {
+const registerNewLineUser = async (userId) => {
   console.log("registration functionality here")
   strapi.services.lineuser.add({"userId" : userId, "score" : 0})
 }
@@ -261,8 +261,8 @@ const registerNewLineUser = (userId) => {
  * @return {int}
  */
 
-const isUserExist = (userId) => {
-  const currentUser = strapi.services.lineuser.search({"userId" : userId})    
+const isUserExist = async (userId) => {
+  const currentUser = await strapi.services.lineuser.search({"userId" : userId})    
   console.log(currentUser)
   if (currentUser.length > 0) {
     console.log("User ${userId} already exist!!")
@@ -279,7 +279,7 @@ const isUserExist = (userId) => {
  * @return {resolve}
  */
 
-const followHandler = (event) => {
+const followHandler = async (event) => {
   if (isUserExist(event.source.userId)) {
     console.log("I was blocked...")
     client.pushMessage(event.source.userId, [{
