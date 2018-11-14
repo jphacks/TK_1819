@@ -268,9 +268,9 @@ const isUserExist = async (userId) => {
     console.log("User ${userId} already exist!!")
     return true
   } else {
-    return false 
     console.log("User doesn't exist!!")
     await registerNewLineUser()
+    return false 
   }
 }
 
