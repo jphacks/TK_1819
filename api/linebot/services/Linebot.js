@@ -270,6 +270,7 @@ const isUserExist = async (userId) => {
   } else {
     return false 
     console.log("User doesn't exist!!")
+    await registerNewLineUser()
   }
 }
 
@@ -280,7 +281,7 @@ const isUserExist = async (userId) => {
  */
 
 const followHandler = async (event) => {
-  if (isUserExist(event.source.userId)) {
+  if (await isUserExist(event.source.userId)) {
     console.log("I was blocked...")
     client.pushMessage(event.source.userId, [{
       "text" : '再登録ありがとうございます！これからもゴミを捨てましょう！',
