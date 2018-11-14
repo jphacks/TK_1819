@@ -188,7 +188,6 @@ module.exports = {
           return acc;
       }
     }, []);
-    console.log($or)
 
     return Lineuser
       .find({ $or })

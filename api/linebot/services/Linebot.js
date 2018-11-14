@@ -252,7 +252,7 @@ module.exports = {
 
 const registerNewLineUser = async (userId) => {
   console.log("registration functionality here")
-  strapi.services.lineuser.add({"userId" : userId, "score" : 0})
+  await strapi.services.lineuser.add({"userId" : userId, "score" : 0})
 }
 
 /**
@@ -262,7 +262,7 @@ const registerNewLineUser = async (userId) => {
  */
 
 const isUserExist = async (userId) => {
-  const currentUser = await strapi.services.lineuser.search({"userId" : userId})
+  const currentUser = await Lineuser.find({"userId" : userId})
   console.log("huge" + currentUser.length)
   if (currentUser.length > 0) {
     console.log("User ${userId} already exist!!")
