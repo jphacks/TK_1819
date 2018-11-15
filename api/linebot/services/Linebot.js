@@ -261,10 +261,13 @@ const registerNewLineUser = async (userId) => {
  * @return {int}
  */
 
+// Maybe creating async branch function is not ideal.
 const isUserExist = async (userId) => {
-  const currentUser = await Lineuser.find({"userID" : userId})
-  if (currentUser.length > 0) {
-    console.log("User {0} already exist!!".format(userId))
+  // .fetch() returns null if not exist
+  const currentUser = await strapi.services.lineuser.fetch({"userID" : userId})
+  console.log(currentUser)
+  if (currentUser) {
+    console.log(`User ${userId} already exist!!`)
     return true
   } else {
     console.log("User doesn't exist!!")
@@ -304,12 +307,26 @@ const followHandler = async (event) => {
 const beaconHandler = async (event) => {
   // console.log("Beacon event detected")
   if (event.beacon.type === 'enter'){
-    if (!isUserExist(event.source.userId)) {
+    if (! await isUserExist(event.source.userId)) {
       console.log("User entered beacon doesn't exist!")
       await registerNewLineUser(event.source.userId)
     }
-    const enteredTrashcan = await strapi.services.trashcan.fetch({"beaconID": event.beacon.hwid})
-    console.log(enteredTrashcan)
+    // Should be better way to write this...
+    const messagedUser = await strapi.services.lineuser.fetch({"userID": event.source.userId})
+    let enteredTrashcan = await strapi.services.trashcan.fetch({"beaconID": event.beacon.hwid})
+    let dupIndex = -1
+    for (let i = 0; i < enteredTrashcan.lineusers.length; i++) {
+      if (enteredTrashcan.lineusers[i]._id.toString() == messagedUser._id.toString()) {
+        dupIndex = i
+        console.log("Found the duplicated user in trashcan index: " + dupIndex)
+      }
+    } 
+    if (dupIndex < 0) {
+      console.log("This user was not in this trashcan")
+      // enteredTrashcanに，userを結びつける
+      enteredTrashcan.lineusers.push(messagedUser)
+      await strapi.services.trashcan.edit({"_id": enteredTrashcan._id}, enteredTrashcan)
+    }
 
     client.pushMessage(event.source.userId, [ {
       type: 'template',
@@ -338,6 +355,21 @@ const beaconHandler = async (event) => {
     }]
     );
   } else if (event.beacon.type === 'leave'){
+    const messagedUser = await strapi.services.lineuser.fetch({"userID": event.source.userId})
+    let leftTrashcan = await strapi.services.trashcan.fetch({"beaconID": event.beacon.hwid})
+    let dupIndex = -1
+    for (let i = 0; i < leftTrashcan.lineusers.length; i++) {
+      if (leftTrashcan.lineusers[i]._id.toString() == messagedUser._id.toString()) {
+        dupIndex = i
+        console.log("Found the user leaved trashcan at index: " + dupIndex)
+      }
+    } 
+    if (dupIndex >= 0) {
+      console.log("This user is in this trashcan")
+      // enteredTrashcanに，userを結びつける
+      leftTrashcan.lineusers.splice(dupIndex, 1)
+      await strapi.services.trashcan.edit({"_id": leftTrashcan._id}, leftTrashcan)
+    }
     // Exiting from zone
     client.pushMessage(event.source.userId, [{
       "text" : 'ばいばい',
@@ -399,34 +431,55 @@ const imageHandler = (event) => {
   // });
 }
 
+const addScore = (currentScore) => {
+  let score 
+  if (currentScore > 5) {
+    score = 0;
+  } else {
+    score = currentScore + 1;
+  }
+  return score 
+}
+
 /**
  * Handle chat events.
  *
  * @return {resolve}
  */
 
-const chatHandler = (event) => {
+const chatHandler = async (event) => {
+  if (! await isUserExist(event.source.userId)) {
+    console.log("User messaged to the bot doesn't exist!")
+    await registerNewLineUser(event.source.userId)
+  } 
+  const messagedUser = await strapi.services.lineuser.fetch({"userID": event.source.userId})
+  let currentUserScore = messagedUser.score;
   if (event.message.text === 'いっぱい' || event.message.text === 'まだ大丈夫' || event.message.text === 'ポイントは？') {
-    // level++;
     client.pushMessage(event.source.userId, [{
       "text" : 'ありがとうございます！',
       "type" : 'text'
     },{
-      "text" : 'あなたは'+ user_hash[event.source.userId]["level"] + 'pointあります。',
+      "text" : 'あなたは' + currentUserScore + 'pointあります。',
       "type" : 'text'
     }]
     );
-
-    setTimeout(myFunc, 3000);
-
   } else if (event.message.text === 'はい') {
-    can_flag = "1";
-    let cur_user_level = user_hash[event.source.userId]["level"];
-    if (cur_user_level > 5) {
-      user_hash[event.source.userId]["level"] = 0;
-    } else {
-      user_hash[event.source.userId]["level"] = cur_user_level + 1;
+    // 捨てに行った場合
+    currentUserScore = addScore(currentUserScore)
+    await strapi.services.lineuser.edit({"userID": event.source.userId}, {"score": currentUserScore})
+
+    // userIDからTrashcanを引いて，stateを変更する
+    console.log(messagedUser)
+    try {
+      let userTrashcan = await strapi.services.trashcan.fetch({"_id": messagedUser.trashcan._id}) 
+      console.log("usertrashcan :: " + userTrashcan)
+      userTrashcan.requestState = messagedUser.score
+      await strapi.services.trashcan.edit({"_id": userTrashcan._id}, userTrashcan)
+      setTimeout(turnOffLamp, 10000, userTrashcan);
+    } catch {
+      console.log("User doesn't belongs to any trashcan")    
     }
+    // update user score in database
     client.pushMessage(event.source.userId, [{
       "type": "template",
       "altText": "ゴミ箱はいっぱいでしたか？",
@@ -448,9 +501,6 @@ const chatHandler = (event) => {
       }
     }]
     );
-
-    can_flag = "1";
-    setTimeout(myFunc, 3000);
   } else {
     client.replyMessage(event.replyToken, {
       "text": event.message.text ,
@@ -463,4 +513,9 @@ const chatHandler = (event) => {
         }
       });
   }
+}
+
+const turnOffLamp = (trashcan) => {
+      trashcan.requestState = -1 
+      strapi.services.trashcan.edit({"_id": trashcan._id}, trashcan)
 }
