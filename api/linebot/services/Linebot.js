@@ -308,7 +308,7 @@ const beaconHandler = async (event) => {
       console.log("User entered beacon doesn't exist!")
       await registerNewLineUser(event.source.userId)
     }
-    const enteredTrashcan = strapi.services.trashcan.fetch({"beaconID":event.beacon.hwid})
+    const enteredTrashcan = await strapi.services.trashcan.fetch({"beaconID": event.beacon.hwid})
     console.log(enteredTrashcan)
 
     client.pushMessage(event.source.userId, [ {
@@ -338,7 +338,6 @@ const beaconHandler = async (event) => {
     }]
     );
   } else if (event.beacon.type === 'leave'){
-    user_hash[event.source.userId]["areaID"] = "";
     // Exiting from zone
     client.pushMessage(event.source.userId, [{
       "text" : 'ばいばい',
