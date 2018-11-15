@@ -314,6 +314,7 @@ const beaconHandler = async (event) => {
     // Should be better way to write this...
     const messagedUser = await strapi.services.lineuser.fetch({"userID": event.source.userId})
     let enteredTrashcan = await strapi.services.trashcan.fetch({"beaconID": event.beacon.hwid})
+    console.log(enteredTrashcan)
     let dupIndex = -1
     for (let i = 0; i < enteredTrashcan.lineusers.length; i++) {
       if (enteredTrashcan.lineusers[i]._id.toString() == messagedUser._id.toString()) {
@@ -335,7 +336,7 @@ const beaconHandler = async (event) => {
         type: 'buttons',
         title: 'お知らせ', // 40文字以内
         text: '近くに燃えるゴミ用のゴミ箱があります。ゴミはゴミ箱へ捨てましょう！捨てに行きますか？', // 60文字以内
-        thumbnailImageUrl: enteredTrashcan.thumbnail, // httpsのみ可
+        thumbnailImageUrl: enteredTrashcan.thumbnail.url, // httpsのみ可
         actions: [{
           type: 'message',
           label: 'はい',
