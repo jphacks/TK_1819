@@ -45,18 +45,22 @@ module.exports = {
   webhook: async (ctx) => {
     // console.log(ctx.request.body);
 
-    Promise
-      .all(ctx.request.body.events.map(strapi.services.linebot.handleEvent))
-      .catch(function (err) {
-        console.log("before then");
-        console.log(err);
-      })
-      .then((result) => ctx.response.body = result)
-      .catch(function (err) {
-        console.log( "Something bad happens in webhook call");
-        console.log(err);
-        process.exit(1);
-      });
+    try {
+      Promise
+        .all(ctx.request.body.events.map(strapi.services.linebot.handleEvent))
+        .catch(function (err) {
+          console.log("before then");
+          console.log(err);
+        })
+        .then((result) => ctx.response.body = result)
+        .catch(function (err) {
+          console.log( "Something bad happens in webhook call");
+          console.log(err);
+          process.exit(1);
+        });
+    } catch {
+      console.log("Strange request")
+    }
   },
 
   /**

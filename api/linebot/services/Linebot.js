@@ -222,7 +222,7 @@ module.exports = {
    */
 
   handleEvent: (event) => {
-    console.log(event);
+    console.log("event === " + event);
     if (event.type == 'follow') {
       followHandler(event)
     } else if (event.type == 'beacon'){
@@ -265,7 +265,7 @@ const registerNewLineUser = async (userId) => {
 const isUserExist = async (userId) => {
   // .fetch() returns null if not exist
   const currentUser = await strapi.services.lineuser.fetch({"userID" : userId})
-  console.log(currentUser)
+  console.log("currentUser == " + currentUser)
   if (currentUser) {
     console.log(`User ${userId} already exist!!`)
     return true
@@ -314,7 +314,7 @@ const beaconHandler = async (event) => {
     // Should be better way to write this...
     const messagedUser = await strapi.services.lineuser.fetch({"userID": event.source.userId})
     let enteredTrashcan = await strapi.services.trashcan.fetch({"beaconID": event.beacon.hwid})
-    console.log(enteredTrashcan)
+    console.log("enteredTrashcan === " + enteredTrashcan)
     let dupIndex = -1
     for (let i = 0; i < enteredTrashcan.lineusers.length; i++) {
       if (enteredTrashcan.lineusers[i]._id.toString() == messagedUser._id.toString()) {
@@ -468,9 +468,8 @@ const chatHandler = async (event) => {
     // 捨てに行った場合
     currentUserScore = addScore(currentUserScore)
     await strapi.services.lineuser.edit({"userID": event.source.userId}, {"score": currentUserScore})
-
+    console.log("messagedUser:: " + messagedUser)
     // userIDからTrashcanを引いて，stateを変更する
-    console.log(messagedUser)
     try {
       let userTrashcan = await strapi.services.trashcan.fetch({"_id": messagedUser.trashcan._id}) 
       console.log("usertrashcan :: " + userTrashcan)
