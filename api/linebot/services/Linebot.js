@@ -301,14 +301,14 @@ const followHandler = async (event) => {
  * @return {resolve}
  */
 
-const beaconHandler = (event) => {
+const beaconHandler = async (event) => {
   console.log("Beacon event detected")
   if (event.beacon.type === 'enter'){
     if (!isUserExist(event.source.userId)) {
       console.log("User entered beacon doesn't exist!")
       await registerNewLineUser(event.source.userId)
     }
-    enteredTrashcan = await strapi.services.trashcan.fetch({"beaconID":event.beacon.hwid})
+    enteredTrashcan = strapi.services.trashcan.fetch({"beaconID":event.beacon.hwid})
     console.log(enteredTrashcan)
 
     client.pushMessage(event.source.userId, [ {
