@@ -477,10 +477,10 @@ const chatHandler = async (event) => {
       userTrashcan.requestState = messagedUser.score
       try {
         await strapi.services.trashcan.edit({"_id": userTrashcan._id}, {"requestState": userTrashcan.requestState})
+        setTimeout(turnOffLamp, 10000, userTrashcan);
       } catch {
         console.log("edit function went wrong")       
       }
-      setTimeout(turnOffLamp, 10000, userTrashcan);
       // update user score in database
       client.pushMessage(event.source.userId, [{
         "type": "template",
@@ -528,5 +528,5 @@ const chatHandler = async (event) => {
 
 const turnOffLamp = (trashcan) => {
   trashcan.requestState = -1 
-  strapi.services.trashcan.edit({"_id": trashcan._id}, trashcan)
+  await strapi.services.trashcan.edit({"_id": trashcan._id}, {"requestState": trashcan.requestState})
 }
