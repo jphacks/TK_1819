@@ -326,7 +326,7 @@ const beaconHandler = async (event) => {
       console.log("This user was not in this trashcan")
       // enteredTrashcanに，userを結びつける
       enteredTrashcan.lineusers.push(messagedUser)
-      await strapi.services.trashcan.edit({"_id": enteredTrashcan._id}, enteredTrashcan)
+      await strapi.services.trashcan.edit({"_id": enteredTrashcan._id}, {"lineusers": enteredTrashcan.lineusers})
     }
 
     client.pushMessage(event.source.userId, [ {
@@ -350,9 +350,9 @@ const beaconHandler = async (event) => {
     }, {
       type: 'location',
       title: 'ここにあります。',
-      address: '東京大学本郷キャンパス工学部２号館',
-      latitude: 35.7144598,
-      longitude: 139.7620094
+      address: enteredTrashcan.name,
+      latitude: enteredTrashcan.location.latitude,
+      longitude: enteredTrashcan.location.latitude
     }]
     );
   } else if (event.beacon.type === 'leave'){
@@ -369,7 +369,7 @@ const beaconHandler = async (event) => {
       console.log("This user is in this trashcan")
       // enteredTrashcanに，userを結びつける
       leftTrashcan.lineusers.splice(dupIndex, 1)
-      await strapi.services.trashcan.edit({"_id": leftTrashcan._id}, leftTrashcan)
+      await strapi.services.trashcan.edit({"_id": leftTrashcan._id}, {"lineusers": leftTrashcan.lineusers})
     }
     // Exiting from zone
     client.pushMessage(event.source.userId, [{
@@ -470,7 +470,7 @@ const chatHandler = async (event) => {
     if (messagedUser.trashcan._id) {
       let userTrashcan = await strapi.services.trashcan.fetch({"_id": messagedUser.trashcan._id}) 
       messagedUser.score = addScore(currentUserScore)
-      await strapi.services.lineuser.edit({"_id": messagedUser._id}, messagedUser)
+      await strapi.services.lineuser.edit({"_id": messagedUser._id}, {"score": messagedUser.score})
       // console.log("messagedUser:: " + messagedUser)
       console.log("user trashcan :: " + userTrashcan)
       // userIDからTrashcanを引いて，stateを変更する
