@@ -446,7 +446,7 @@ let getFullNum = (function () {
   var counter = 0;
   return function () {
     if (counter > 3) {
-      counter = 0 
+      counter = 1 
     } else {
       counter += 1;
     }
