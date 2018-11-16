@@ -442,6 +442,11 @@ const addScore = (currentScore) => {
   return score 
 }
 
+let getFullNum = (function () {
+  var counter = 0;
+  return function () {counter += 1; return counter}
+})()
+
 /**
  * Handle chat events.
  *
@@ -456,11 +461,10 @@ const chatHandler = async (event) => {
   let messagedUser = await strapi.services.lineuser.fetch({"userID": event.source.userId})
   let currentUserScore = messagedUser.score;
 
-  if (event.message.text === 'いっぱい') {
-    var getFullNum = (function () {
-      var counter = 0;
-      return function () {counter += 1; return counter}
-    })()
+  if (event.message.text === 'ポイントは？') {
+
+  } else if (event.message.text === 'いっぱい') {
+    
     
     if (getFullNum() > 3) {
       console.log("It's actualy full!")
@@ -476,8 +480,12 @@ const chatHandler = async (event) => {
     } else {
       console.log("It's not full yet")
     }
-    messagedUser.score = addScore(currentUserScore)
-    await strapi.services.lineuser.edit({"_id": messagedUser._id}, {"score": messagedUser.score})
+    try {
+      messagedUser.score = addScore(currentUserScore)
+      await strapi.services.lineuser.edit({"_id": messagedUser._id}, {"score": messagedUser.score})
+    } catch {
+      console.log("score edit went wrong")
+    }
     client.pushMessage(event.source.userId, [{
       "text" : 'ご報告ありがとうございます！',
       "type" : 'text'
@@ -486,7 +494,7 @@ const chatHandler = async (event) => {
       "type" : 'text'
     }]
     )
-  } else if (event.message.text === 'まだ大丈夫' || event.message.text === 'ポイントは？') {
+  } else if (event.message.text === 'まだ大丈夫') {
     client.pushMessage(event.source.userId, [{
       "text" : 'ありがとうございます！',
       "type" : 'text'
