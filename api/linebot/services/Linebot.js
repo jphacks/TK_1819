@@ -265,7 +265,7 @@ const registerNewLineUser = async (userId) => {
 const isUserExist = async (userId) => {
   // .fetch() returns null if not exist
   const currentUser = await strapi.services.lineuser.fetch({"userID" : userId})
-  console.log("currentUser == " + currentUser)
+  // console.log("currentUser == " + currentUser)
   if (currentUser) {
     console.log(`User ${userId} already exist!!`)
     return true
@@ -470,11 +470,12 @@ const chatHandler = async (event) => {
     // 捨てに行った場合
     messagedUser.score = addScore(currentUserScore)
     await strapi.services.lineuser.edit({"_id": messagedUser._id}, messagedUser)
-    console.log("messagedUser:: " + messagedUser)
+    // console.log("messagedUser:: " + messagedUser)
+    console.log("user trashcan :: " + userTrashcan)
     // userIDからTrashcanを引いて，stateを変更する
     try {
       userTrashcan.requestState = messagedUser.score
-      await strapi.services.trashcan.edit({"_id": userTrashcan._id}, userTrashcan)
+      // await strapi.services.trashcan.edit({"_id": userTrashcan._id}, userTrashcan)
       setTimeout(turnOffLamp, 10000, userTrashcan);
     } catch {
       console.log("Any user doesn't belong to any trashcan")    
@@ -514,7 +515,6 @@ const chatHandler = async (event) => {
 }
 
 const turnOffLamp = (trashcan) => {
-  console.log("turnofflamp trashcan :: " + userTrashcan)
   trashcan.requestState = -1 
   strapi.services.trashcan.edit({"_id": trashcan._id}, trashcan)
 }
