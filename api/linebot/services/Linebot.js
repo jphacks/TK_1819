@@ -444,7 +444,14 @@ const addScore = (currentScore) => {
 
 let getFullNum = (function () {
   var counter = 0;
-  return function () {counter += 1; return counter}
+  return function () {
+    if (counter > 3) {
+      counter = 0 
+    } else {
+      counter += 1;
+    }
+    return counter
+  }
 })()
 
 /**
@@ -460,13 +467,18 @@ const chatHandler = async (event) => {
   } 
   let messagedUser = await strapi.services.lineuser.fetch({"userID": event.source.userId})
   let currentUserScore = messagedUser.score;
-
+  
   if (event.message.text === 'ポイントは？') {
-
+    client.pushMessage(event.source.userId, [{
+      "text" : 'ありがとうございます！',
+      "type" : 'text'
+    },{
+      "text" : 'あなたは現在' + currentUserScore + 'point保有しています。',
+      "type" : 'text'
+    }]
+    )
   } else if (event.message.text === 'いっぱい') {
-    
-    
-    if (getFullNum() > 3) {
+    if (getFullNum() >= 3) {
       console.log("It's actualy full!")
       if (messagedUser.trashcan._id) {
         let userTrashcan = await strapi.services.trashcan.fetch({"_id": messagedUser.trashcan._id}) 
@@ -495,14 +507,20 @@ const chatHandler = async (event) => {
     }]
     )
   } else if (event.message.text === 'まだ大丈夫') {
+    try {
+      messagedUser.score = addScore(currentUserScore)
+      await strapi.services.lineuser.edit({"_id": messagedUser._id}, {"score": messagedUser.score})
+    } catch {
+      console.log("score edit went wrong")
+    }
     client.pushMessage(event.source.userId, [{
-      "text" : 'ありがとうございます！',
+      "text" : 'ご報告ありがとうございます！',
       "type" : 'text'
     },{
       "text" : 'あなたは現在' + currentUserScore + 'point保有しています。',
       "type" : 'text'
     }]
-    );
+    )
   } else if (event.message.text === 'はい') {
     // 捨てに行った場合
     if (messagedUser.trashcan._id) {
