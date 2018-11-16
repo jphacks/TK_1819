@@ -454,9 +454,8 @@ const chatHandler = async (event) => {
     await registerNewLineUser(event.source.userId)
   } 
   let messagedUser = await strapi.services.lineuser.fetch({"userID": event.source.userId})
-  let userTrashcan = await strapi.services.trashcan.fetch({"_id": messagedUser.trashcan._id}) 
-
   let currentUserScore = messagedUser.score;
+
   if (event.message.text === 'いっぱい' || event.message.text === 'まだ大丈夫' || event.message.text === 'ポイントは？') {
     client.pushMessage(event.source.userId, [{
       "text" : 'ありがとうございます！',
@@ -468,40 +467,57 @@ const chatHandler = async (event) => {
     );
   } else if (event.message.text === 'はい') {
     // 捨てに行った場合
-    messagedUser.score = addScore(currentUserScore)
-    await strapi.services.lineuser.edit({"_id": messagedUser._id}, messagedUser)
-    // console.log("messagedUser:: " + messagedUser)
-    console.log("user trashcan :: " + userTrashcan)
-    // userIDからTrashcanを引いて，stateを変更する
-    try {
-      userTrashcan.requestState = messagedUser.score
-      // await strapi.services.trashcan.edit({"_id": userTrashcan._id}, userTrashcan)
-      setTimeout(turnOffLamp, 10000, userTrashcan);
-    } catch {
-      console.log("Any user doesn't belong to any trashcan")    
-    }
-    // update user score in database
-    client.pushMessage(event.source.userId, [{
-      "type": "template",
-      "altText": "ゴミ箱はいっぱいでしたか？",
-      "template": {
-        "type": "confirm",
-        "text": "ゴミ箱はいっぱいでしたか？",
-        "actions": [
-          {
-            "type": "message",
-            "label": "いっぱい",
-            "text": "いっぱい"
-          },
-          {
-            "type": "message",
-            "label": "まだ大丈夫",
-            "text": "まだ大丈夫"
-          }
-        ]
+    if (messagedUser.trashcan._id) {
+      let userTrashcan = await strapi.services.trashcan.fetch({"_id": messagedUser.trashcan._id}) 
+      messagedUser.score = addScore(currentUserScore)
+      await strapi.services.lineuser.edit({"_id": messagedUser._id}, messagedUser)
+      // console.log("messagedUser:: " + messagedUser)
+      console.log("user trashcan :: " + userTrashcan)
+      // userIDからTrashcanを引いて，stateを変更する
+      if (userTrashcan != undefined) {
+        userTrashcan.requestState = messagedUser.score
+        try {
+          await strapi.services.trashcan.edit({"_id": userTrashcan._id}, userTrashcan)
+        } catch {
+          console.log("edit function went wrong")       
+        }
+        setTimeout(turnOffLamp, 10000, userTrashcan);
+      } catch {
+        console.log("This user doesn't belongs to any trashcan")    
       }
-    }]
-    );
+      // update user score in database
+      client.pushMessage(event.source.userId, [{
+        "type": "template",
+        "altText": "ゴミ箱はいっぱいでしたか？",
+        "template": {
+          "type": "confirm",
+          "text": "ゴミ箱はいっぱいでしたか？",
+          "actions": [
+            {
+              "type": "message",
+              "label": "いっぱい",
+              "text": "いっぱい"
+            },
+            {
+              "type": "message",
+              "label": "まだ大丈夫",
+              "text": "まだ大丈夫"
+            }
+          ]
+        }
+      }]
+      )
+    } else {
+      console.log("This user doesn't belongs to any trashcan")    
+      client.pushMessage(event.source.userId, [{
+        "text" : '近くにごみ箱はありません！',
+        "type" : 'text'
+      },{
+        "text" : 'あなたは' + currentUserScore + 'pointあります。',
+        "type" : 'text'
+      }]
+      )
+    }
   } else {
     client.replyMessage(event.replyToken, {
       "text": event.message.text ,
