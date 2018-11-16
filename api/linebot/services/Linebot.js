@@ -474,17 +474,13 @@ const chatHandler = async (event) => {
       // console.log("messagedUser:: " + messagedUser)
       console.log("user trashcan :: " + userTrashcan)
       // userIDからTrashcanを引いて，stateを変更する
-      if (userTrashcan != undefined) {
-        userTrashcan.requestState = messagedUser.score
-        try {
-          await strapi.services.trashcan.edit({"_id": userTrashcan._id}, userTrashcan)
-        } catch {
-          console.log("edit function went wrong")       
-        }
-        setTimeout(turnOffLamp, 10000, userTrashcan);
+      userTrashcan.requestState = messagedUser.score
+      try {
+        await strapi.services.trashcan.edit({"_id": userTrashcan._id}, userTrashcan)
       } catch {
-        console.log("This user doesn't belongs to any trashcan")    
+        console.log("edit function went wrong")       
       }
+      setTimeout(turnOffLamp, 10000, userTrashcan);
       // update user score in database
       client.pushMessage(event.source.userId, [{
         "type": "template",
