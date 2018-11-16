@@ -11,13 +11,15 @@ url = 'https://hack-api.herokuapp.com/trashcans/5be705564ce0a041e16fb161/request
 req = urllib.request.Request(url)
 
 pygame.init()
+base = os.path.dirname(os.path.abspath(__file__))
+
 
 def blink(pt):
     print("blink start")
-    if pt <= 5:
-        sound = pygame.mixer.Sound("wav/piano1.wav")
+    if pt >= 5:
+        sound = pygame.mixer.Sound(os.path.normpath(os.path.join(base, "wav/piano1.wav")))
     else:
-        sound = pygame.mixer.Sound("wav/decision5.wav")
+        sound = pygame.mixer.Sound(os.path.normpath(os.path.join(base, "wav/decision5.wav")))
     sound.play()
     cmd1 = "bash"
     cmd2 = "python3 /home/pi/rpi-rgb-led-matrix/bindings/python/samples/runtext.py --led-no-hardware-pulse LED_NO_HARDWARE_PULSE -r 16 -t " + "'GOMI UP   " + str(pt) + "  pt'" 
