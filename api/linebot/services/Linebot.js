@@ -528,5 +528,5 @@ const chatHandler = async (event) => {
 
 const turnOffLamp = (trashcan) => {
   trashcan.requestState = -1 
-  await strapi.services.trashcan.edit({"_id": trashcan._id}, {"requestState": trashcan.requestState})
+  strapi.services.trashcan.edit({"_id": trashcan._id}, {"requestState": trashcan.requestState})
 }
