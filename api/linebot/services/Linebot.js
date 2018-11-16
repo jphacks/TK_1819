@@ -456,12 +456,42 @@ const chatHandler = async (event) => {
   let messagedUser = await strapi.services.lineuser.fetch({"userID": event.source.userId})
   let currentUserScore = messagedUser.score;
 
-  if (event.message.text === 'いっぱい' || event.message.text === 'まだ大丈夫' || event.message.text === 'ポイントは？') {
+  if (event.message.text === 'いっぱい') {
+    var getFullNum = (function () {
+      var counter = 0;
+      return function () {counter += 1; return counter}
+    })()
+    
+    if (getFullNum() > 3) {
+      console.log("It's actualy full!")
+      if (messagedUser.trashcan._id) {
+        let userTrashcan = await strapi.services.trashcan.fetch({"_id": messagedUser.trashcan._id}) 
+        try {
+          // editの中身が変だとUnresolved promiseになる．
+          await strapi.services.trashcan.edit({"_id": userTrashcan._id}, {"isFull": true})
+        } catch {
+          console.log("isFull edit went wrong")       
+        }
+      }
+    } else {
+      console.log("It's not full yet")
+    }
+    messagedUser.score = addScore(currentUserScore)
+    await strapi.services.lineuser.edit({"_id": messagedUser._id}, {"score": messagedUser.score})
+    client.pushMessage(event.source.userId, [{
+      "text" : 'ご報告ありがとうございます！',
+      "type" : 'text'
+    },{
+      "text" : 'あなたは現在' + currentUserScore + 'point保有しています。',
+      "type" : 'text'
+    }]
+    )
+  } else if (event.message.text === 'まだ大丈夫' || event.message.text === 'ポイントは？') {
     client.pushMessage(event.source.userId, [{
       "text" : 'ありがとうございます！',
       "type" : 'text'
     },{
-      "text" : 'あなたは' + currentUserScore + 'pointあります。',
+      "text" : 'あなたは現在' + currentUserScore + 'point保有しています。',
       "type" : 'text'
     }]
     );
@@ -471,11 +501,12 @@ const chatHandler = async (event) => {
       let userTrashcan = await strapi.services.trashcan.fetch({"_id": messagedUser.trashcan._id}) 
       messagedUser.score = addScore(currentUserScore)
       await strapi.services.lineuser.edit({"_id": messagedUser._id}, {"score": messagedUser.score})
-      // console.log("messagedUser:: " + messagedUser)
-      console.log("user trashcan :: " + userTrashcan)
-      // userIDからTrashcanを引いて，stateを変更する
       userTrashcan.requestState = messagedUser.score
+      // console.log("messagedUser:: " + messagedUser)
+      // console.log("user trashcan :: " + userTrashcan)
+      // userIDからTrashcanを引いて，stateを変更する
       try {
+        // editの中身が変だとUnresolved promiseになる．
         await strapi.services.trashcan.edit({"_id": userTrashcan._id}, {"requestState": userTrashcan.requestState})
         setTimeout(turnOffLamp, 10000, userTrashcan);
       } catch {
