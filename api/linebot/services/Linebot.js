@@ -475,6 +475,7 @@ const chatHandler = async (event) => {
     try {
       console.log("usertrashcan :: " + userTrashcan)
       userTrashcan.requestState = messagedUser.score
+      console.log("after changing requeststate :: " + userTrashcan)
       await strapi.services.trashcan.edit({"_id": userTrashcan._id}, userTrashcan)
       setTimeout(turnOffLamp, 10000, userTrashcan);
     } catch {
@@ -506,13 +507,11 @@ const chatHandler = async (event) => {
     client.replyMessage(event.replyToken, {
       "text": event.message.text ,
       "type" : 'text'
-    }
-    )
-      .catch((err) => {
-        if (err instanceof HTTPError) {
-          console.error("Request ot Line server went wrong status code:" + err.statusCode);
-        }
-      });
+    }).catch((err) => {
+      if (err instanceof HTTPError) {
+        console.error("Request ot Line server went wrong status code:" + err.statusCode);
+      }
+    });
   }
 }
 
