@@ -44,6 +44,10 @@
     "lineusers": {
       "collection": "lineuser",
       "via": "trashcan"
+    },
+    "fullCounter": {
+      "default": "",
+      "type": "integer"
     }
   }
 }
