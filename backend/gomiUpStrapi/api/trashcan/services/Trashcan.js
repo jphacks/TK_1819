@@ -112,6 +112,8 @@ module.exports = {
    */
 
   edit: async (params, values) => {
+    // console.log("params" + params)
+    // console.log("values" + values)
     // Extract values related to relational data.
     const relations = _.pick(values, Trashcan.associations.map(a => a.alias));
     const data = _.omit(values, Trashcan.associations.map(a => a.alias));
@@ -214,4 +216,18 @@ module.exports = {
       .limit(filters.limit)
       .populate(populate);
   }
+  // },
+
+  // addUserToTrashcan: async (user, trashcan) => {
+  //   // Retrieve the list of users with their articles.
+  //   return Trashcan 
+  //     .update()
+  // },
+
+  // findUsersWithTrashcan: async (params) => {
+  //   // Retrieve the list of users with their articles.
+  //   const users = User
+  //     .find()
+  //     .populate('articles');
+  // }
 };

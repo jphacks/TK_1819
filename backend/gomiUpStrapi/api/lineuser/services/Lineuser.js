@@ -164,6 +164,7 @@ module.exports = {
       .join(' ');
 
     const $or = Object.keys(Lineuser.attributes).reduce((acc, curr) => {
+      console.log(Lineuser.attributes[curr].type)
       switch (Lineuser.attributes[curr].type) {
         case 'integer':
         case 'float':
