@@ -473,13 +473,11 @@ const chatHandler = async (event) => {
     console.log("messagedUser:: " + messagedUser)
     // userIDからTrashcanを引いて，stateを変更する
     try {
-      console.log("usertrashcan :: " + userTrashcan)
       userTrashcan.requestState = messagedUser.score
-      console.log("after changing requeststate :: " + userTrashcan)
       await strapi.services.trashcan.edit({"_id": userTrashcan._id}, userTrashcan)
       setTimeout(turnOffLamp, 10000, userTrashcan);
     } catch {
-      console.log("User doesn't belongs to any trashcan")    
+      console.log("Any user doesn't belong to any trashcan")    
     }
     // update user score in database
     client.pushMessage(event.source.userId, [{
@@ -516,6 +514,7 @@ const chatHandler = async (event) => {
 }
 
 const turnOffLamp = (trashcan) => {
-      trashcan.requestState = -1 
-      strapi.services.trashcan.edit({"_id": trashcan._id}, trashcan)
+  console.log("turnofflamp trashcan :: " + userTrashcan)
+  trashcan.requestState = -1 
+  strapi.services.trashcan.edit({"_id": trashcan._id}, trashcan)
 }
