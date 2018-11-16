@@ -453,7 +453,9 @@ const chatHandler = async (event) => {
     console.log("User messaged to the bot doesn't exist!")
     await registerNewLineUser(event.source.userId)
   } 
-  const messagedUser = await strapi.services.lineuser.fetch({"userID": event.source.userId})
+  let messagedUser = await strapi.services.lineuser.fetch({"userID": event.source.userId})
+  let userTrashcan = await strapi.services.trashcan.fetch({"_id": messagedUser.trashcan._id}) 
+
   let currentUserScore = messagedUser.score;
   if (event.message.text === 'いっぱい' || event.message.text === 'まだ大丈夫' || event.message.text === 'ポイントは？') {
     client.pushMessage(event.source.userId, [{
@@ -466,12 +468,11 @@ const chatHandler = async (event) => {
     );
   } else if (event.message.text === 'はい') {
     // 捨てに行った場合
-    currentUserScore = addScore(currentUserScore)
-    await strapi.services.lineuser.edit({"userID": event.source.userId}, {"score": currentUserScore})
+    messagedUser.score = addScore(currentUserScore)
+    await strapi.services.lineuser.edit({"_id": messagedUser._id}, messagedUser)
     console.log("messagedUser:: " + messagedUser)
     // userIDからTrashcanを引いて，stateを変更する
     try {
-      let userTrashcan = await strapi.services.trashcan.fetch({"_id": messagedUser.trashcan._id}) 
       console.log("usertrashcan :: " + userTrashcan)
       userTrashcan.requestState = messagedUser.score
       await strapi.services.trashcan.edit({"_id": userTrashcan._id}, userTrashcan)
