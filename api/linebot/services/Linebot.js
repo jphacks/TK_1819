@@ -315,6 +315,7 @@ const beaconHandler = async (event) => {
     const messagedUser = await strapi.services.lineuser.fetch({"userID": event.source.userId})
     let enteredTrashcan = await strapi.services.trashcan.fetch({"beaconID": event.beacon.hwid})
     console.log("enteredTrashcan === " + enteredTrashcan)
+    // すでに登録されているかを調べる
     let dupIndex = -1
     for (let i = 0; i < enteredTrashcan.lineusers.length; i++) {
       if (enteredTrashcan.lineusers[i]._id.toString() == messagedUser._id.toString()) {
@@ -358,6 +359,7 @@ const beaconHandler = async (event) => {
   } else if (event.beacon.type === 'leave'){
     const messagedUser = await strapi.services.lineuser.fetch({"userID": event.source.userId})
     let leftTrashcan = await strapi.services.trashcan.fetch({"beaconID": event.beacon.hwid})
+    // すでに登録されているかを調べる
     let dupIndex = -1
     for (let i = 0; i < leftTrashcan.lineusers.length; i++) {
       if (leftTrashcan.lineusers[i]._id.toString() == messagedUser._id.toString()) {
@@ -442,17 +444,15 @@ const addScore = (currentScore) => {
   return score 
 }
 
-let getFullNum = (function () {
-  var counter = 0;
-  return function () {
-    if (counter > 3) {
-      counter = 1 
-    } else {
-      counter += 1;
-    }
-    return counter
+const addFullCounter = (currentFullCounter) => {
+  let counter 
+  if (currentFullCounter > 3) {
+    counter = 0;
+  } else {
+    counter = currentFullCounter + 1;
   }
-})()
+  return counter 
+}
 
 /**
  * Handle chat events.
@@ -478,19 +478,21 @@ const chatHandler = async (event) => {
     }]
     )
   } else if (event.message.text === 'いっぱい') {
-    if (getFullNum() >= 3) {
-      console.log("It's actualy full!")
-      if (messagedUser.trashcan._id) {
-        let userTrashcan = await strapi.services.trashcan.fetch({"_id": messagedUser.trashcan._id}) 
+    if (messagedUser.trashcan._id) {
+      let userTrashcan = await strapi.services.trashcan.fetch({"_id": messagedUser.trashcan._id}) 
+      // fullCounterはここでしか使用しないからここで初めて引いてくる(userScoreとの非対称はそれが原因)
+      const currentFullCounter = addFullCounter(userTrashcan.fullCounter)
+      if (currentFullCounter >= 3) {
+        console.log("It's actualy full!")
         try {
           // editの中身が変だとUnresolved promiseになる．
-          await strapi.services.trashcan.edit({"_id": userTrashcan._id}, {"isFull": true})
+          await strapi.services.trashcan.edit({"_id": userTrashcan._id}, {"fullCounter": currentFullCounter, "isFull": true})
         } catch {
           console.log("isFull edit went wrong")       
         }
+      } else {
+        console.log("It's not full yet")
       }
-    } else {
-      console.log("It's not full yet")
     }
     try {
       messagedUser.score = addScore(currentUserScore)
