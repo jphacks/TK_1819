@@ -476,7 +476,7 @@ const chatHandler = async (event) => {
       // userIDからTrashcanを引いて，stateを変更する
       userTrashcan.requestState = messagedUser.score
       try {
-        await strapi.services.trashcan.edit({"_id": userTrashcan._id}, userTrashcan)
+        await strapi.services.trashcan.edit({"_id": userTrashcan._id}, {"requestState": userTrashcan.requestState})
       } catch {
         console.log("edit function went wrong")       
       }
