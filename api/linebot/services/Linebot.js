@@ -337,7 +337,7 @@ const beaconHandler = async (event) => {
         type: 'buttons',
         title: 'お知らせ', // 40文字以内
         text: '近くに燃えるゴミ用のゴミ箱があります。ゴミはゴミ箱へ捨てましょう！捨てに行きますか？', // 60文字以内
-        thumbnailImageUrl: enteredTrashcan.thumbnail.url, // httpsのみ可
+        thumbnailImageUrl: "https://" + process.env.HOSTNAME + enteredTrashcan.thumbnail.url, // httpsのみ可
         actions: [{
           type: 'message',
           label: 'はい',
@@ -387,7 +387,13 @@ const beaconHandler = async (event) => {
  * @return {resolve}
  */
 
-const imageHandler = (event) => {
+const imageHandler = async (event) => {
+  const config = await strapi.store({
+    environment: strapi.config.environment,
+    type: 'plugin',
+    name: 'upload'
+  }).get({ key: 'provider' });
+
   let image_buf;
   const options = {
     url: `https://api.line.me/v2/bot/message/${event.message.id}/content`,
@@ -407,7 +413,7 @@ const imageHandler = (event) => {
     method:'GET'
   };
 
-  console.log("image message has been sent");
+  console.log("image message had been sent");
   var req = http.request(send_options, function(res){
     var data = [];
 
@@ -418,7 +424,9 @@ const imageHandler = (event) => {
       console.log(err);
     }).on('end', function(){
       console.log("finished recieving the image");
-      getObjectName(data);
+      console.log(strapi.config.url)
+      const uploadedFiles = await strapi.plugins.upload.services.upload.upload(data, config);
+      // getObjectName(data);
     });
   });
   // request(options, function(error, response, body) {
