@@ -410,39 +410,49 @@ const imageHandler = (event) => {
 
 
   console.log("image message had been sent");
-  var req = http.request(send_options, function(res){
-    var data = [];
-    console.log("recieved the image");
-    res.on('data', function(chunk){
-      data.push(new Buffer(chunk));
-    }).on('error', function(err){
-      console.log(err);
-    }).on('end', function(){
-      console.log("finished recieving the image");
-      console.log(strapi.config.url)
+  // var req = http.request(send_options, function(res){
+  //   var data = [];
+  //   console.log("recieved the image");
+  //   res.on('data', function(chunk){
+  //     data.push(new Buffer(chunk));
+  //   }).on('error', function(err){
+  //     console.log(err);
+  //   }).on('end', function(){
+  //     console.log("finished recieving the image");
+  //     console.log(strapi.config.url)
+  //     let files = {}
+  //     files.images = data
+  //     if (strapi.plugins.upload && Object.keys(files).length > 0) {
+  //       // Upload new files and attach them to this entity.
+  //       await strapi.plugins.upload.services.upload.uploadToEntity({
+  //         id: "5bf03a6b0c8ee12e4a869fce",
+  //         model: Trashcan 
+  //       }, files, source);
+  //     }
+  //     // getObjectName(data);
+  //   });
+  // });
+
+  request(options, function(error, response, body) {
+    if (!error && response.statusCode == 200) {
+      // image_buf = body
+      image_buf = new Buffer(body)
+      console.log('file recieved');
       let files = {}
-      files.images = data
+      files.images = image_buf 
       if (strapi.plugins.upload && Object.keys(files).length > 0) {
         // Upload new files and attach them to this entity.
-        await strapi.plugins.upload.services.upload.uploadToEntity({
-          id: "5bf03a6b0c8ee12e4a869fce",
-          model: Trashcan 
-        }, files, source);
+        // await strapi.plugins.upload.services.upload.uploadToEntity({
+        //   id: "5bf03a6b0c8ee12e4a869fce",
+        //   model: Trashcan 
+        // }, files, "nana");
       }
-      // getObjectName(data);
-    });
+      // getObjectName(image_buf.toString('binary'));
+    } else {
+      console.log(error);
+      process.exit(1);
+    }
   });
-  // request(options, function(error, response, body) {
-  //   if (!error && response.statusCode == 200) {
-  //     // image_buf = body
-  //     image_buf = new Buffer(body)
-  //     console.log('file recieved');
-  //     getObjectName(image_buf.toString('binary'));
-  //   } else {
-  //     console.log(error);
-  //     process.exit(1);
-  //   }
-  // });
 }
 
 const addScore = (currentScore, scoreNum) => {
