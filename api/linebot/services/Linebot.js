@@ -387,13 +387,7 @@ const beaconHandler = async (event) => {
  * @return {resolve}
  */
 
-const imageHandler = async (event) => {
-  const config = await strapi.store({
-    environment: strapi.config.environment,
-    type: 'plugin',
-    name: 'upload'
-  }).get({ key: 'provider' });
-
+const imageHandler = (event) => {
   let image_buf;
   const options = {
     url: `https://api.line.me/v2/bot/message/${event.message.id}/content`,
@@ -403,6 +397,7 @@ const imageHandler = async (event) => {
     },
     encoding: null
   };
+
   const send_options = {
     host: 'api.line.me',
     path: `/v2/bot/message/${event.message.id}/content`,
@@ -413,10 +408,22 @@ const imageHandler = async (event) => {
     method:'GET'
   };
 
+  let context = {
+    "request": {
+      "body": {
+          "files": "", // Buffer or stream of file(s)
+          "path": "user/avatar", // Uploading folder of file(s).
+          "refId": "5a993616b8e66660e8baf45c", // User's Id.
+          "ref": "user", // Model name.
+          "source": "users-permissions", // Plugin name.
+          "field": "avatar" // Field name in the User model.
+      }
+    }
+  } 
+
   console.log("image message had been sent");
   var req = http.request(send_options, function(res){
     var data = [];
-
     console.log("recieved the image");
     res.on('data', function(chunk){
       data.push(new Buffer(chunk));
@@ -425,7 +432,7 @@ const imageHandler = async (event) => {
     }).on('end', function(){
       console.log("finished recieving the image");
       console.log(strapi.config.url)
-      const uploadedFiles = await strapi.plugins.upload.services.upload.upload(data, config);
+      strapi.plugins.upload.controllers.upload.upload(context);
       // getObjectName(data);
     });
   });
