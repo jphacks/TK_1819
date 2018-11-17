@@ -387,8 +387,8 @@ const beaconHandler = async (event) => {
  * @return {resolve}
  */
 
-const imageHandler = async (event) => {
-  const config = await strapi.store({
+const imageHandler = (event) => {
+  const config = strapi.store({
     environment: strapi.config.environment,
     type: 'plugin',
     name: 'upload'
@@ -425,7 +425,7 @@ const imageHandler = async (event) => {
     }).on('end', function(){
       console.log("finished recieving the image");
       console.log(strapi.config.url)
-      const uploadedFiles = await strapi.plugins.upload.services.upload.upload(data, config);
+      const uploadedFiles = strapi.plugins.upload.services.upload.upload(data, config);
       // getObjectName(data);
     });
   });
