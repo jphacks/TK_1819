@@ -18,12 +18,21 @@
       }
 
       .marker.full {
-        background-image: url('Trash-Full-icon_txt.png');
+        background-image: url('Trash-Full-icon-txt.png');
         background-size: cover;
         width: 50px;
         height: 50px;
         border-radius: 50%;
         cursor: pointer;
+      }
+      
+
+      .imagebox {
+        width: 200px;
+        height: 130px;
+        overflow-y:hidden;
+        overflow-x:auto;
+        white-space: nowrap;
       }
 
       body {
@@ -44,7 +53,7 @@
 <div id='map'></div>
 
 <script>
-
+const backendHost = "https://calm-waters-31464.herokuapp.com"
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2h1bmtpbiIsImEiOiJjam9qcWlqZWYwM3pvM3BxbzY2MHVwcDhiIn0.Ne4nnKeFzoY8QF4k61EWng';
 
 var map = new mapboxgl.Map({
@@ -104,15 +113,26 @@ geojson.features.forEach(function(markerInfo) {
 
 // update map state
 const updateStates = (trashcan, el) => {
-  updatedHTML = '<h3>' + trashcan.name + '</h3><p>現在付近に' + Object.keys(trashcan.lineusers).length + '人います。</p>'
+  let updatedHTML = '<h3>' + trashcan.name + '</h3><p>現在付近に' + Object.keys(trashcan.lineusers).length + '人います。</p>'
+  // console.log(Object.values(trashcan.images))
+  if (trashcan.images) {
+    updatedHTML += '<div class="imagebox">' 
+    imageArray = Object.values(trashcan.images) 
+    imageArray.forEach((image, index) => {
+      if (index >= imageArray.length - 3) {
+        updatedHTML += '<img src="' + backendHost + image.url + '" alt=trashcan' + index + ' height="120">'
+      }
+    })
+    updatedHTML += '</div>' 
+  }
   if (trashcan.isFull) {
     el.classList.remove('empty')
     el.classList.add('full')
-    updatedHTML += "\nもういっぱいです。"
+    updatedHTML += "<br />もういっぱいです。"
   } else {
     el.classList.remove('full')
     el.classList.add('empty')
-    updatedHTML += "\nまだいっぱいではないです。"
+    updatedHTML += "<br />まだいっぱいではないです。"
   }
   // markers[trashcan._id].getPopup.setHTML(updatedHTML)
   markers[trashcan._id].getPopup().setHTML(updatedHTML)
@@ -141,7 +161,7 @@ const updateMarkers = (trashcan) => {
 
 const checkForUpdate = () => {
   // console.log(markers)
-  fetch("https://calm-waters-31464.herokuapp.com/trashcans", {
+  fetch(backendHost + "/trashcans", {
     method: "GET",
     mode: "cors",
   }).then((response) => {
