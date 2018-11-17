@@ -449,7 +449,7 @@ const imageHandler = async (event) => {
 
   image_buf = await doRequest(options)
   let files = {}
-  files.images.File = image_buf 
+  files.images["File"] = image_buf 
   if (strapi.plugins.upload && Object.keys(files).length > 0) {
     // Upload new files and attach them to this entity.
     await strapi.plugins.upload.services.upload.uploadToEntity({
