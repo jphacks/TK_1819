@@ -434,23 +434,26 @@ const imageHandler = (event) => {
   // });
 }
 
-const addScore = (currentScore) => {
+const addScore = (currentScore, scoreNum) => {
   let score 
-  if (currentScore > 5) {
-    score = 0;
-  } else {
-    score = currentScore + 1;
-  }
+  score = currentScore + scoreNum;
+  // if (currentScore > 5) {
+  //   score = 0;
+  // } else {
+  //   score = currentScore + 1;
+  // }
   return score 
 }
 
 const addFullCounter = (currentFullCounter) => {
+  // console.log("this is currentfullcounter!!!" + currentFullCounter)
   let counter 
-  if (currentFullCounter > 3) {
-    counter = 0;
-  } else {
-    counter = currentFullCounter + 1;
-  }
+  counter = currentFullCounter + 1;
+  // if (currentFullCounter > 3) {
+  //   counter = 0;
+  // } else {
+  //   counter = currentFullCounter + 1;
+  // }
   return counter 
 }
 
@@ -491,11 +494,12 @@ const chatHandler = async (event) => {
           console.log("isFull edit went wrong")       
         }
       } else {
+        await strapi.services.trashcan.edit({"_id": userTrashcan._id}, {"fullCounter": currentFullCounter, "isFull": false})
         console.log("It's not full yet")
       }
     }
     try {
-      messagedUser.score = addScore(currentUserScore)
+      messagedUser.score = addScore(currentUserScore, 3)
       await strapi.services.lineuser.edit({"_id": messagedUser._id}, {"score": messagedUser.score})
     } catch {
       console.log("score edit went wrong")
@@ -510,7 +514,7 @@ const chatHandler = async (event) => {
     )
   } else if (event.message.text === 'まだ大丈夫') {
     try {
-      messagedUser.score = addScore(currentUserScore)
+      messagedUser.score = addScore(currentUserScore, 3)
       await strapi.services.lineuser.edit({"_id": messagedUser._id}, {"score": messagedUser.score})
     } catch {
       console.log("score edit went wrong")
@@ -527,7 +531,7 @@ const chatHandler = async (event) => {
     // 捨てに行った場合
     if (messagedUser.trashcan._id) {
       let userTrashcan = await strapi.services.trashcan.fetch({"_id": messagedUser.trashcan._id}) 
-      messagedUser.score = addScore(currentUserScore)
+      messagedUser.score = addScore(currentUserScore, 1)
       await strapi.services.lineuser.edit({"_id": messagedUser._id}, {"score": messagedUser.score})
       userTrashcan.requestState = messagedUser.score
       // console.log("messagedUser:: " + messagedUser)
