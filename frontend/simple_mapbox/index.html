@@ -26,6 +26,9 @@
         cursor: pointer;
       }
       
+      .trashcanImage {
+        margin-right:10px;
+      }
 
       .imagebox {
         width: 200px;
@@ -68,17 +71,17 @@ var map = new mapboxgl.Map({
 var geojson = {
   type: 'Feature',
   features: [{
-    type: 'Feature',
-    geometry: {
-      type: 'Point',
-      coordinates: [139.7620094, 35.7144598]
-    },
-    properties: {
-      title: '本郷キャンパス',
-      description: 'ごみ箱A'
-    }
-  },
-  {
+//    type: 'Feature',
+//    geometry: {
+//      type: 'Point',
+//      coordinates: [139.7620094, 35.7144598]
+//    },
+//    properties: {
+//      title: '本郷キャンパス',
+//      description: 'ごみ箱A'
+//    }
+//  },
+//  {
     type: 'Feature',
     geometry: {
       type: 'Point',
@@ -111,6 +114,7 @@ geojson.features.forEach(function(markerInfo) {
     .addTo(map);
 })
 
+let previousHTML = ""
 // update map state
 const updateStates = (trashcan, el) => {
   let updatedHTML = '<h3>' + trashcan.name + '</h3><p>現在付近に' + Object.keys(trashcan.lineusers).length + '人います。</p>'
@@ -120,7 +124,7 @@ const updateStates = (trashcan, el) => {
     imageArray = Object.values(trashcan.images) 
     imageArray.forEach((image, index) => {
       if (index >= imageArray.length - 3) {
-        updatedHTML += '<img src="' + backendHost + image.url + '" alt=trashcan' + index + ' height="120">'
+        updatedHTML += '<img class="trashcanImage" src="' + backendHost + image.url + '" alt=trashcan' + index + ' height="120">'
       }
     })
     updatedHTML += '</div>' 
@@ -134,8 +138,11 @@ const updateStates = (trashcan, el) => {
     el.classList.add('empty')
     updatedHTML += "<br />まだいっぱいではないです。"
   }
+  if (updatedHTML == previousHTML) {
+  }
   // markers[trashcan._id].getPopup.setHTML(updatedHTML)
   markers[trashcan._id].getPopup().setHTML(updatedHTML)
+  previousHTML = updatedHTML
 }
 
 const updateMarkers = (trashcan) => {
