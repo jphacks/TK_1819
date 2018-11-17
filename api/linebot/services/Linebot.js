@@ -452,12 +452,12 @@ const imageHandler = async (event) => {
   // files.images["File"] = image_buf 
   console.log(image_buf)
   let files = image_buf 
+  files["path"] = '/tmp/tmp'
   if (strapi.plugins.upload && Object.keys(files).length > 0) {
     // Upload new files and attach them to this entity.
     await strapi.plugins.upload.services.upload.uploadToEntity({
       id: "5bf03a6b0c8ee12e4a869fce",
       model: 'trashcan', 
-      path: '/tmp/tmp'
     }, files, null);
   }
 }
