@@ -377,39 +377,40 @@ geojson.features.forEach(function(markerInfo) {
     .addTo(map);
 })
 
-let previousHTML = ""
+let previousHTML = {}
 // update map state
 const updateStates = (trashcan, el) => {
-  let updatedHTML = '<h3>' + trashcan.name + '</h3><p>現在付近に' + Object.keys(trashcan.lineusers).length + '人います。</p>'
+  let updatedHTML = {}
+  updatedHTML[trashcan._id] = '<h3>' + trashcan.name + '</h3><p>現在付近に' + Object.keys(trashcan.lineusers).length + '人います。</p>'
   // console.log(Object.values(trashcan.images))
   if (trashcan.images) {
-    updatedHTML += '<div class="imagebox">' 
+    updatedHTML[trashcan._id] += '<div class="imagebox">' 
     imageArray = Object.values(trashcan.images) 
     imageArray.forEach((image, index) => {
       if (index >= imageArray.length - 3) {
-        updatedHTML += '<img class="trashcanImage" src="' + backendHost + image.url + '" alt=trashcan' + index + ' height="120">'
+        updatedHTML[trashcan._id] += '<img class="trashcanImage" src="' + backendHost + image.url + '" alt=trashcan' + index + ' height="120">'
       }
     })
-    updatedHTML += '</div>' 
+    updatedHTML[trashcan._id] += '</div>' 
   }
   if (trashcan.isFull) {
     el.classList.remove('empty')
     el.classList.add('full')
-    updatedHTML += "<br />もういっぱいです。"
+    updatedHTML[trashcan._id] += "<br />もういっぱいです。"
   } else {
     el.classList.remove('full')
     el.classList.add('empty')
-    updatedHTML += "<br />まだいっぱいではないです。"
+    updatedHTML[trashcan._id] += "<br />まだいっぱいではないです。"
   }
-  if (updatedHTML == previousHTML) {
+  if (updatedHTML[trashcan._id] === previousHTML[trashcan._id]) {
     console.log("nothing has been changed")
   } else {
-    markers[trashcan._id].getPopup().setHTML(updatedHTML)
+    markers[trashcan._id].getPopup().setHTML(updatedHTML[trashcan._id])
   }
-  previousHTML = updatedHTML
+  previousHTML[trashcan._id] = updatedHTML[trashcan._id]
 }
 
-const updateMarkers = (trashcan) => {
+const updateMarkers = (trashcan, index) => {
   // update or create markers depending on existance on the map
   // 条件分岐を書く
   if (markers.hasOwnProperty(trashcan._id)) {
