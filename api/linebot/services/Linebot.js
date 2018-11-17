@@ -221,7 +221,7 @@ module.exports = {
    * @return {resolve}
    */
 
-  handleEvent: (event) => {
+  handleEvent: async (event) => {
     console.log("event === " + event);
     if (event.type == 'follow') {
       followHandler(event)
@@ -387,7 +387,21 @@ const beaconHandler = async (event) => {
  * @return {resolve}
  */
 
-const imageHandler = (event) => {
+// helper for await
+function doRequest(options) {
+  return new Promise(function (resolve, reject) {
+    request(options, function (error, res, body) {
+      if (!error && res.statusCode == 200) {
+        resolve(new Buffer(body));
+      } else {
+        reject(error);
+      }
+    });
+  });
+}
+
+
+const imageHandler = async (event) => {
   let image_buf;
   const options = {
     url: `https://api.line.me/v2/bot/message/${event.message.id}/content`,
@@ -433,26 +447,16 @@ const imageHandler = (event) => {
   //   });
   // });
 
-  request(options, function(error, response, body) {
-    if (!error && response.statusCode == 200) {
-      // image_buf = body
-      image_buf = new Buffer(body)
-      console.log('file recieved');
-      let files = {}
-      files.images = image_buf 
-      if (strapi.plugins.upload && Object.keys(files).length > 0) {
-        // Upload new files and attach them to this entity.
-        // await strapi.plugins.upload.services.upload.uploadToEntity({
-        //   id: "5bf03a6b0c8ee12e4a869fce",
-        //   model: Trashcan 
-        // }, files, "nana");
-      }
-      // getObjectName(image_buf.toString('binary'));
-    } else {
-      console.log(error);
-      process.exit(1);
-    }
-  });
+  image_buf = await doRequest(options)
+  let files = {}
+  files.images = image_buf 
+  if (strapi.plugins.upload && Object.keys(files).length > 0) {
+    // Upload new files and attach them to this entity.
+    await strapi.plugins.upload.services.upload.uploadToEntity({
+      id: "5bf03a6b0c8ee12e4a869fce",
+      model: 'trashcan' 
+    }, files, "nana");
+  }
 }
 
 const addScore = (currentScore, scoreNum) => {
