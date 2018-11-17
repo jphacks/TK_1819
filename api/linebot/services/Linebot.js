@@ -455,7 +455,7 @@ const imageHandler = async (event) => {
     await strapi.plugins.upload.services.upload.uploadToEntity({
       id: "5bf03a6b0c8ee12e4a869fce",
       model: 'trashcan' 
-    }, files, "nana");
+    }, files, null);
   }
 }
 
