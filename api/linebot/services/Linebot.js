@@ -421,7 +421,7 @@ const imageHandler = (event) => {
       console.log("finished recieving the image");
       console.log(strapi.config.url)
       let files = {}
-      // files.images = kk
+      files.images = data
       if (strapi.plugins.upload && Object.keys(files).length > 0) {
         // Upload new files and attach them to this entity.
         await strapi.plugins.upload.services.upload.uploadToEntity({
