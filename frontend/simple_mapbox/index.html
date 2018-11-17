@@ -8,8 +8,17 @@
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.css' rel='stylesheet' />
     <style>
-      .marker {
+      .marker.empty {
         background-image: url('Trash-Empty-icon.png');
+        background-size: cover;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+
+      .marker.full {
+        background-image: url('Trash-Full-icon.png');
         background-size: cover;
         width: 50px;
         height: 50px;
@@ -73,27 +82,65 @@ var geojson = {
   }]
 };
 
-//;marker = [] 
+
+// titleをkeyにもつhashとして管理する
+let markers = {} 
 // add markers to map
-geojson.features.forEach(function(marker, index) {
-  console.log(index)
+geojson.features.forEach(function(markerInfo) {
   // create a HTML element for each feature
   var el = document.createElement('div');
   el.className = 'marker';
+  el.classList.add('empty')
+  // こんな感じでidを分けてCSSを管理する
+  // el.id = 'empty';
 
   // make a marker for each feature and add to the map
-  marker[index] = new mapboxgl.Marker(el)
-    .setLngLat(marker.geometry.coordinates)
-    .addTo(map)
+  markers[markerInfo.properties.title] = new mapboxgl.Marker(el)
+    .setLngLat(markerInfo.geometry.coordinates)
     .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-    .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
+    .setHTML('<h3>' + markerInfo.properties.title + '</h3><p>' + markerInfo.properties.description + '</p>'))
     .addTo(map);
-  console.log(marker)
-});
+})
 
+// update map state
+const updateStates = (trashcan, el) => {
+  updatedHTML = '<h3>' + trashcan.name + '</h3><p>現在付近に' + Object.keys(trashcan.lineusers).length + '人います。</p>'
+  if (trashcan.isFull) {
+    el.classList.remove('empty')
+    el.classList.add('full')
+    updatedHTML += "\nもういっぱいです。"
+  } else {
+    el.classList.remove('full')
+    el.classList.add('empty')
+    updatedHTML += "\nまだいっぱいではないです。"
+  }
+  // markers[trashcan._id].getPopup.setHTML(updatedHTML)
+  markers[trashcan._id].getPopup().setHTML(updatedHTML)
+}
+
+const updateMarkers = (trashcan) => {
+  // update or create markers depending on existance on the map
+  // 条件分岐を書く
+  if (markers.hasOwnProperty(trashcan._id)) {
+    // when trashcan already exist in the map
+    // update trashcan state in map
+    el = markers[trashcan._id].getElement()
+    updateStates(trashcan, el)
+  } else {
+    // when trashcan is not yet exist in the map
+    var el = document.createElement('div');
+    el.className = 'marker';
+    el.classList.add('empty')
+    markers[trashcan._id] = new mapboxgl.Marker(el)
+      .setLngLat([trashcan.location["longitude"], trashcan.location["latitude"]])
+      .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+      .setHTML('<h3>' + trashcan.name + '</h3><p>現在付近に' + Object.keys(trashcan.lineusers).length + '人います。</p>'))
+      .addTo(map);
+  }
+}
 
 const checkForUpdate = () => {
-  //console.log(marker[0])
+  // console.log(markers)
   fetch("https://calm-waters-31464.herokuapp.com/trashcans", {
     method: "GET",
     mode: "cors",
@@ -101,6 +148,7 @@ const checkForUpdate = () => {
     return response.json();
   }).then((json) => {
     console.log(json)
+    json.forEach(updateMarkers)
   })
 }
 
