@@ -8,6 +8,15 @@
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.css' rel='stylesheet' />
     <style>
+      .marker {
+        background-image: url('Trash-Empty-icon.png');
+        background-size: cover;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+
       body {
         margin: 0;
         padding: 0;
@@ -31,12 +40,71 @@ mapboxgl.accessToken = 'pk.eyJ1Ijoic2h1bmtpbiIsImEiOiJjam9qcWlqZWYwM3pvM3BxbzY2M
 
 var map = new mapboxgl.Map({
   container: 'map',
-  style: 'mapbox://styles/mapbox/light-v9',
-  center: [-96, 37.8],
-  zoom: 3
+  // ;style: 'mapbox://styles/mapbox/light-v9',
+  style: 'mapbox://styles/mapbox/dark-v9',
+  center: [139.7620094, 35.7144598],
+  zoom: 18
 });
 
 // code from the next step will go here!
+var geojson = {
+  type: 'Feature',
+  features: [{
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [139.7620094, 35.7144598]
+    },
+    properties: {
+      title: '本郷キャンパス',
+      description: 'ごみ箱A'
+    }
+  },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [139.6537, 35.5553]
+      },
+      properties: {
+        title: '矢上キャンパス',
+        description: 'ごみ箱B'
+      }
+    }]
+};
+
+var marker = [] 
+// add markers to map
+geojson.features.forEach(function(marker, index) {
+  console.log(index)
+  // create a HTML element for each feature
+  var el = document.createElement('div');
+  el.className = 'marker';
+
+  // make a marker for each feature and add to the map
+  marker[index] = new mapboxgl.Marker(el)
+    .setLngLat(marker.geometry.coordinates)
+    .addTo(map)
+    .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+    .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
+    .addTo(map);
+  console.log(marker)
+});
+
+
+const checkForUpdate = () => {
+  console.log(marker[index])
+  fetch("https://calm-waters-31464.herokuapp.com/trashcans", {
+    method: "GET",
+    mode: "cors",
+  }).then((response) => {
+    return response.json();
+  }).then((json) => {
+    console.log(json)
+  })
+}
+
+setInterval(checkForUpdate, 1000)
 
 </script>
 
