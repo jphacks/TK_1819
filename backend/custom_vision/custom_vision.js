@@ -2,7 +2,7 @@ var request = require('request');
 var fs = require('fs')
 
 var formData = {
-    file: fs.createReadStream('/Users/t_iwai/Downloads/209586510_624.jpg'),
+    file: fs.createReadStream('/path/to/image'),
 };
 
 
