@@ -353,7 +353,7 @@ const beaconHandler = async (event) => {
       title: 'ここにあります。',
       address: enteredTrashcan.name,
       latitude: enteredTrashcan.location.latitude,
-      longitude: enteredTrashcan.location.latitude
+      longitude: enteredTrashcan.location.longitude
     }]
     );
   } else if (event.beacon.type === 'leave'){
@@ -408,18 +408,6 @@ const imageHandler = (event) => {
     method:'GET'
   };
 
-  let context = {
-    "request": {
-      "body": {
-          "files": "", // Buffer or stream of file(s)
-          "path": "user/avatar", // Uploading folder of file(s).
-          "refId": "5a993616b8e66660e8baf45c", // User's Id.
-          "ref": "user", // Model name.
-          "source": "users-permissions", // Plugin name.
-          "field": "avatar" // Field name in the User model.
-      }
-    }
-  } 
 
   console.log("image message had been sent");
   var req = http.request(send_options, function(res){
@@ -432,7 +420,7 @@ const imageHandler = (event) => {
     }).on('end', function(){
       console.log("finished recieving the image");
       console.log(strapi.config.url)
-      strapi.plugins.upload.controllers.upload.upload(context);
+
       // getObjectName(data);
     });
   });
