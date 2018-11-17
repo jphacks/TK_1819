@@ -60,20 +60,20 @@ var geojson = {
       description: 'ごみ箱A'
     }
   },
-    {
-      type: 'Feature',
-      geometry: {
-        type: 'Point',
-        coordinates: [139.6537, 35.5553]
-      },
-      properties: {
-        title: '矢上キャンパス',
-        description: 'ごみ箱B'
-      }
-    }]
+  {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [139.6537, 35.5553]
+    },
+    properties: {
+      title: '矢上キャンパス',
+      description: 'ごみ箱B'
+    }
+  }]
 };
 
-var marker = [] 
+//;marker = [] 
 // add markers to map
 geojson.features.forEach(function(marker, index) {
   console.log(index)
@@ -93,7 +93,7 @@ geojson.features.forEach(function(marker, index) {
 
 
 const checkForUpdate = () => {
-  console.log(marker[index])
+  //console.log(marker[0])
   fetch("https://calm-waters-31464.herokuapp.com/trashcans", {
     method: "GET",
     mode: "cors",

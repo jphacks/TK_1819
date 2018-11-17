@@ -76,3 +76,6 @@ typings/
 .fusebox/
 
 # database info
+
+# Mac
+.DS_Store
