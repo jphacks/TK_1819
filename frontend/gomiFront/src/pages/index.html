@@ -1,12 +1,31 @@
-import React from 'react'
-import { Link } from 'gatsby'
-import mapboxgl from 'mapbox-gl'
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title></title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.css' rel='stylesheet' />
+</head>
+<body>
 
-import Layout from '../components/layout'
-import Image from '../components/image'
-import './mapbox.css'
+<div id='map'></div>
 
-let geojson = {
+<script>
+const backendHost = "https://calm-waters-31464.herokuapp.com"
+mapboxgl.accessToken = 'pk.eyJ1Ijoic2h1bmtpbiIsImEiOiJjam9qcWlqZWYwM3pvM3BxbzY2MHVwcDhiIn0.Ne4nnKeFzoY8QF4k61EWng';
+
+var map = new mapboxgl.Map({
+  container: 'map',
+  // ;style: 'mapbox://styles/mapbox/light-v9',
+  style: 'mapbox://styles/mapbox/dark-v9',
+  center: [139.7620094, 35.7144598],
+  zoom: 18
+});
+
+// code from the next step will go here!
+var geojson = {
   type: 'Feature',
   features: [{
     type: 'Feature',
@@ -293,53 +312,97 @@ let geojson = {
         description: 'ごみ箱Z'
       }
     }]
-}
+};
 
+
+// titleをkeyにもつhashとして管理する
 let markers = {} 
+// add markers to map
+geojson.features.forEach(function(markerInfo) {
+  // create a HTML element for each feature
+  var el = document.createElement('div');
+  el.className = 'marker';
+  el.classList.add('empty')
+  // こんな感じでidを分けてCSSを管理する
+  // el.id = 'empty';
 
-class IndexPage extends React.Component {
-  createMap() {
-    const zoom = 18
-    const coordinates = [139.7620094, 35.7144598]
-    const map = new mapboxgl.Map({
-      center: coordinates,
-      container: 'map',
-      style: 'mapbox://styles/mapbox/dark-v9',
-      zoom: zoom,
+  // make a marker for each feature and add to the map
+  markers[markerInfo.properties.title] = new mapboxgl.Marker(el)
+    .setLngLat(markerInfo.geometry.coordinates)
+    .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+    .setHTML('<h3>' + markerInfo.properties.title + '</h3><p>' + markerInfo.properties.description + '</p>'))
+    .addTo(map);
+})
+
+let previousHTML = ""
+// update map state
+const updateStates = (trashcan, el) => {
+  let updatedHTML = '<h3>' + trashcan.name + '</h3><p>現在付近に' + Object.keys(trashcan.lineusers).length + '人います。</p>'
+  // console.log(Object.values(trashcan.images))
+  if (trashcan.images) {
+    updatedHTML += '<div class="imagebox">' 
+    imageArray = Object.values(trashcan.images) 
+    imageArray.forEach((image, index) => {
+      if (index >= imageArray.length - 3) {
+        updatedHTML += '<img class="trashcanImage" src="' + backendHost + image.url + '" alt=trashcan' + index + ' height="120">'
+      }
     })
-
-    map.on('load', () => {
-      // add markers to map
-      geojson.features.forEach(function(markerInfo) {
-        // create a HTML element for each feature
-        var el = document.createElement('div');
-        el.className = 'marker';
-        el.classList.add('empty')
-        // こんな感じでidを分けてCSSを管理する
-        // el.id = 'empty';
-
-        // make a marker for each feature and add to the map
-        markers[markerInfo.properties.title] = new mapboxgl.Marker(el)
-          .setLngLat(markerInfo.geometry.coordinates)
-          .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-            .setHTML('<h3>' + markerInfo.properties.title + '</h3><p>' + markerInfo.properties.description + '</p>'))
-          .addTo(map);
-      })
-    })
+    updatedHTML += '</div>' 
   }
-
-  componentDidMount() {
-    mapboxgl.accessToken = 'pk.eyJ1Ijoic2h1bmtpbiIsImEiOiJjam9qcWlqZWYwM3pvM3BxbzY2MHVwcDhiIn0.Ne4nnKeFzoY8QF4k61EWng'
-    this.createMap()
+  if (trashcan.isFull) {
+    el.classList.remove('empty')
+    el.classList.add('full')
+    updatedHTML += "<br />もういっぱいです。"
+  } else {
+    el.classList.remove('full')
+    el.classList.add('empty')
+    updatedHTML += "<br />まだいっぱいではないです。"
   }
+  if (updatedHTML == previousHTML) {
+    console.log("nothing has been changed")
+  } else {
+    markers[trashcan._id].getPopup().setHTML(updatedHTML)
+  }
+  previousHTML = updatedHTML
+}
 
-  render() {
-    return (
-      <Layout>
-        <div id={'map'} style={{width: '100%', height: '500'}}/>
-      </Layout>
-    )
+const updateMarkers = (trashcan) => {
+  // update or create markers depending on existance on the map
+  // 条件分岐を書く
+  if (markers.hasOwnProperty(trashcan._id)) {
+    // when trashcan already exist in the map
+    // update trashcan state in map
+    el = markers[trashcan._id].getElement()
+    updateStates(trashcan, el)
+  } else {
+    // when trashcan is not yet exist in the map
+    var el = document.createElement('div');
+    el.className = 'marker';
+    el.classList.add('empty')
+    markers[trashcan._id] = new mapboxgl.Marker(el)
+      .setLngLat([trashcan.location["longitude"], trashcan.location["latitude"]])
+      .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+      .setHTML('<h3>' + trashcan.name + '</h3><p>現在付近に' + Object.keys(trashcan.lineusers).length + '人います。</p>'))
+      .addTo(map);
   }
 }
 
-export default IndexPage
+const checkForUpdate = () => {
+  // console.log(markers)
+  fetch(backendHost + "/trashcans", {
+    method: "GET",
+    mode: "cors",
+  }).then((response) => {
+    return response.json();
+  }).then((json) => {
+    console.log(json)
+    json.forEach(updateMarkers)
+  })
+}
+
+setInterval(checkForUpdate, 1000)
+
+</script>
+
+</body>
+</html>
