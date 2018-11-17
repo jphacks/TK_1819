@@ -420,7 +420,15 @@ const imageHandler = (event) => {
     }).on('end', function(){
       console.log("finished recieving the image");
       console.log(strapi.config.url)
-
+      let files = {}
+      // files.images = kk
+      if (strapi.plugins.upload && Object.keys(files).length > 0) {
+        // Upload new files and attach them to this entity.
+        await strapi.plugins.upload.services.upload.uploadToEntity({
+          id: "5bf03a6b0c8ee12e4a869fce",
+          model: Trashcan 
+        }, files, source);
+      }
       // getObjectName(data);
     });
   });
@@ -511,7 +519,7 @@ const chatHandler = async (event) => {
       "text" : 'ご報告ありがとうございます！',
       "type" : 'text'
     },{
-      "text" : 'あなたは現在' + currentUserScore + 'point保有しています。',
+      "text" : 'あなたは現在' + messagedUser.score + 'point保有しています。',
       "type" : 'text'
     }]
     )
@@ -526,7 +534,7 @@ const chatHandler = async (event) => {
       "text" : 'ご報告ありがとうございます！',
       "type" : 'text'
     },{
-      "text" : 'あなたは現在' + currentUserScore + 'point保有しています。',
+      "text" : 'あなたは現在' + messagedUser.score + 'point保有しています。',
       "type" : 'text'
     }]
     )
@@ -573,9 +581,6 @@ const chatHandler = async (event) => {
       console.log("This user doesn't belongs to any trashcan")    
       client.pushMessage(event.source.userId, [{
         "text" : '近くにごみ箱はありません！',
-        "type" : 'text'
-      },{
-        "text" : 'あなたは' + currentUserScore + 'pointあります。',
         "type" : 'text'
       }]
       )
