@@ -478,15 +478,20 @@ const imageHandler = async (event) => {
   var formData = {
     // file: myReadableStreamBuffer,
     file: escape(image_buf).toString('binary'),
+    options:{
+      contentType:req.file.mimetype,
+      filename:"image.jpg"
+    }
   };
 
   var customVisionApiRequestOptions = {
     uri: "https://southcentralus.api.cognitive.microsoft.com/customvision/v2.0/Prediction/09776bb1-e376-4557-b2c1-49fc7700eeef/image?iterationId=6554a808-deca-4481-b833-e6f7895b58ed",
     headers: {
-      "Content-Type": "application/octet-stream",
+      "Content-Type": "multipart/form-data",
       "Prediction-Key": "1e6c252eef53454ab399198a722d7a6d"
     },
-    formData: formData
+    formData: image_buf
+    // formData: formData
     // formData: myReadableStreamBuffer
   };
 
