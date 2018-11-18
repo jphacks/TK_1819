@@ -477,6 +477,7 @@ const imageHandler = async (event) => {
     formData: formData
   };
 
+  let tag = ""
   request.post(customVisionApiRequestOptions, function (error, response, body) {
     // 結果取得OKの場合
 
