@@ -478,10 +478,10 @@ const imageHandler = async (event) => {
   var formData = {
     // file: myReadableStreamBuffer,
     file: escape(image_buf).toString('binary'),
-    options:{
-      contentType:req.file.mimetype,
-      filename:"image.jpg"
-    }
+    // options:{
+    //   contentType:req.file.mimetype,
+    //   filename:"image.jpg"
+    // }
   };
 
   var customVisionApiRequestOptions = {
