@@ -404,7 +404,6 @@ function doRequest(options) {
 
 
 const imageHandler = async (event) => {
-  let image_buf;
   const options = {
     url: `https://api.line.me/v2/bot/message/${event.message.id}/content`,
     method: 'get',
@@ -449,7 +448,7 @@ const imageHandler = async (event) => {
   //   });
   // });
 
-  image_buf = await doRequest(options)
+  let image_buf = await doRequest(options)
   // let files = {}
   // files.images["File"] = image_buf 
   console.log(image_buf)
@@ -487,7 +486,7 @@ const imageHandler = async (event) => {
       "Content-Type": "multipart/form-data",
       "Prediction-Key": "1e6c252eef53454ab399198a722d7a6d"
     },
-    formData: image_buf
+    formData: escape(image_buf).toString('binary')
     // formData: formData
     // formData: myReadableStreamBuffer
   };
