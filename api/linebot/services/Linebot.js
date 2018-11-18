@@ -473,19 +473,21 @@ const imageHandler = async (event) => {
   }); 
 
   // With a buffer
-  myReadableStreamBuffer.put(image_buf);
+  myReadableStreamBuffer.put(Buffer.concat(image_buf));
 
   var formData = {
-    file: myReadableStreamBuffer,
+    // file: myReadableStreamBuffer,
+    file: escape(file_buffer).toString('binary'),
   };
 
   var customVisionApiRequestOptions = {
     uri: "https://southcentralus.api.cognitive.microsoft.com/customvision/v2.0/Prediction/09776bb1-e376-4557-b2c1-49fc7700eeef/image?iterationId=6554a808-deca-4481-b833-e6f7895b58ed",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/octet-stream",
       "Prediction-Key": "1e6c252eef53454ab399198a722d7a6d"
     },
     formData: formData
+    // formData: myReadableStreamBuffer
   };
 
   let tag = ""
