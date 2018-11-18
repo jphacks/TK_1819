@@ -466,6 +466,18 @@ const imageHandler = async (event) => {
   //   }, files, null);
   // }
 
+  // Initialize stream
+  var myReadableStreamBuffer = new streamBuffers.ReadableStreamBuffer({
+    frequency: 10,      // in milliseconds.
+    chunkSize: 2048     // in bytes.
+  }); 
+
+  // With a buffer
+  myReadableStreamBuffer.put(image_buf);
+
+  var formData = {
+    file: myReadableStreamBuffer,
+  };
 
   var customVisionApiRequestOptions = {
     uri: "https://southcentralus.api.cognitive.microsoft.com/customvision/v2.0/Prediction/09776bb1-e376-4557-b2c1-49fc7700eeef/image?iterationId=6554a808-deca-4481-b833-e6f7895b58ed",
@@ -474,19 +486,6 @@ const imageHandler = async (event) => {
       "Prediction-Key": "1e6c252eef53454ab399198a722d7a6d"
     },
     formData: formData
-  };
-
-  // Initialize stream
-  var myReadableStreamBuffer = new streamBuffers.ReadableStreamBuffer({
-    frequency: 10,      // in milliseconds.
-    chunkSize: 2048     // in bytes.
-  }); 
-  
-      // With a buffer
-  myReadableStreamBuffer.put(image_buf);
-  
-  var formData = {
-        file: myReadableStreamBuffer,
   };
 
   let tag = ""
