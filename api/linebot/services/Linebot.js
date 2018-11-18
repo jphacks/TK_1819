@@ -12,6 +12,8 @@ const os = require('os');
 const hostname = os.hostname();
 const request = require('request');
 const http = require('https');
+const streamBuffers = require('stream-buffers');
+
 
 const axios = require('axios');
 const PORT = process.env.PORT || 3000;
@@ -464,9 +466,6 @@ const imageHandler = async (event) => {
   //   }, files, null);
   // }
 
-  var formData = {
-        file: image_buf,
-  };
 
   var customVisionApiRequestOptions = {
     uri: "https://southcentralus.api.cognitive.microsoft.com/customvision/v2.0/Prediction/09776bb1-e376-4557-b2c1-49fc7700eeef/image?iterationId=6554a808-deca-4481-b833-e6f7895b58ed",
@@ -477,12 +476,23 @@ const imageHandler = async (event) => {
     formData: formData
   };
 
+  // Initialize stream
+  var myReadableStreamBuffer = new streamBuffers.ReadableStreamBuffer({
+    frequency: 10,      // in milliseconds.
+    chunkSize: 2048     // in bytes.
+  }); 
+  
+      // With a buffer
+  myReadableStreamBuffer.put(image_buf);
+  
+  var formData = {
+        file: myReadableStreamBuffer,
+  };
+
   let tag = ""
   request.post(customVisionApiRequestOptions, function (error, response, body) {
     // 結果取得OKの場合
-
     if (!error && response.statusCode == 200) {
-      // food タグ および カテゴリーを取得
       if (JSON.parse(response.body).predictions[0].tagName != "garbagebox") {
         if (JSON.parse(response.body).predictions[0].probability > 0.5) {
           tag = "Negative";
@@ -493,6 +503,19 @@ const imageHandler = async (event) => {
         }
       }
       console.log(tag)
+      if (tag == "garbagebox") {
+        client.pushMessage(event.source.userId, [{
+          "text" : 'ごみ箱の写真です！！',
+          "type" : 'text'
+        }])       
+      } else {
+        client.pushMessage(event.source.userId, [{
+          "text" : 'ごみ箱以外の写真です....',
+          "type" : 'text'
+        }])
+      }
+
+
       // 取得したタグに対応してメッセージをセット
       // メッセージ送信
 
