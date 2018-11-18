@@ -473,11 +473,11 @@ const imageHandler = async (event) => {
   }); 
 
   // With a buffer
-  myReadableStreamBuffer.put(Buffer.concat(image_buf));
+  // myReadableStreamBuffer.put(Buffer.concat(image_buf));
 
   var formData = {
     // file: myReadableStreamBuffer,
-    file: escape(file_buffer).toString('binary'),
+    file: escape(image_buf).toString('binary'),
   };
 
   var customVisionApiRequestOptions = {
