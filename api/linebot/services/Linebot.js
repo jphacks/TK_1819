@@ -444,12 +444,13 @@ const imageHandler = async (event) => {
     console.log("image sent")
     if (!error && response.statusCode == 200) {
       console.log(response.body)
-      if (JSON.parse(response.body).predictions[0].tagName != "garbagebox") {
-        if (JSON.parse(response.body).predictions[0].probability > 0.5) {
+      const CVresult = JSON.parse(response.body)
+      if (CVresult.predictions[0].tagName != "garbagebox") {
+        if (CVresult.predictions[0].probability > 0.5) {
           tag = "Negative";
         }
       } else {
-        if (JSON.parse(response.body).predictions[1].probability > 0.5) {
+        if (CVresult.predictions[0].probability > 0.5) {
           tag = "garbagebox";
         }
       }
