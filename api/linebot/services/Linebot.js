@@ -451,7 +451,7 @@ const imageHandler = async (event) => {
   let image_buff = await doRequest(options)
   // let files = {}
   // files.images["File"] = image_buf 
-  console.log(image_buf)
+  console.log(image_buff)
   // let files = image_buf 
   // files["path"] = '/tmp/tmp'
   // if (strapi.plugins.upload && Object.keys(files).length > 0) {
@@ -473,7 +473,7 @@ const imageHandler = async (event) => {
 
   var formData = {
     // file: myReadableStreamBuffer,
-    file: escape(image_buf).toString('binary'),
+    file: escape(image_buff).toString('binary'),
     // options:{
     //   contentType:req.file.mimetype,
     //   filename:"image.jpg"
@@ -483,7 +483,7 @@ const imageHandler = async (event) => {
   var customVisionApiRequestOptions = {
     uri: "https://southcentralus.api.cognitive.microsoft.com/customvision/v2.0/Prediction/09776bb1-e376-4557-b2c1-49fc7700eeef/image?iterationId=6554a808-deca-4481-b833-e6f7895b58ed",
     headers: {
-      "Content-Type": "multipart/form-data",
+      "Content-Type": "multipart/application/octet-stream",
       "Prediction-Key": "1e6c252eef53454ab399198a722d7a6d"
     },
     // formData: escape(image_buf).toString('binary')
