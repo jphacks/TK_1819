@@ -9,6 +9,8 @@ const os = require('os');
 const hostname = os.hostname();
 const request = require('request');
 const http = require('https');
+const streamBuffers = require('stream-buffers');
+
 
 const axios = require('axios');
 const PORT = process.env.PORT || 3000;
@@ -221,7 +223,7 @@ module.exports = {
    * @return {resolve}
    */
 
-  handleEvent: (event) => {
+  handleEvent: async (event) => {
     console.log("event === " + event);
     if (event.type == 'follow') {
       followHandler(event)
@@ -337,7 +339,7 @@ const beaconHandler = async (event) => {
         type: 'buttons',
         title: 'お知らせ', // 40文字以内
         text: '近くに燃えるゴミ用のゴミ箱があります。ゴミはゴミ箱へ捨てましょう！捨てに行きますか？', // 60文字以内
-        thumbnailImageUrl: enteredTrashcan.thumbnail.url, // httpsのみ可
+        thumbnailImageUrl: "https://" + process.env.HOSTNAME + enteredTrashcan.thumbnail.url, // httpsのみ可
         actions: [{
           type: 'message',
           label: 'はい',
@@ -353,7 +355,7 @@ const beaconHandler = async (event) => {
       title: 'ここにあります。',
       address: enteredTrashcan.name,
       latitude: enteredTrashcan.location.latitude,
-      longitude: enteredTrashcan.location.latitude
+      longitude: enteredTrashcan.location.longitude
     }]
     );
   } else if (event.beacon.type === 'leave'){
@@ -387,8 +389,21 @@ const beaconHandler = async (event) => {
  * @return {resolve}
  */
 
-const imageHandler = (event) => {
-  let image_buf;
+// helper for await
+function doRequest(options) {
+  return new Promise(function (resolve, reject) {
+    request(options, function (error, res, body) {
+      if (!error && res.statusCode == 200) {
+        resolve(new Buffer(body));
+      } else {
+        reject(error);
+      }
+    });
+  });
+}
+
+
+const imageHandler = async (event) => {
   const options = {
     url: `https://api.line.me/v2/bot/message/${event.message.id}/content`,
     method: 'get',
@@ -397,41 +412,71 @@ const imageHandler = (event) => {
     },
     encoding: null
   };
+
   const send_options = {
     host: 'api.line.me',
     path: `/v2/bot/message/${event.message.id}/content`,
     headers: {
-      "Content-type": "application/json; charset=UTF-8",
+      // "Content-type": "application/json; charset=UTF-8",
       "Authorization": " Bearer " + config.channelAccessToken
     },
     method:'GET'
   };
 
-  console.log("image message has been sent");
-  var req = http.request(send_options, function(res){
-    var data = [];
 
-    console.log("recieved the image");
-    res.on('data', function(chunk){
-      data.push(new Buffer(chunk));
-    }).on('error', function(err){
-      console.log(err);
-    }).on('end', function(){
-      console.log("finished recieving the image");
-      getObjectName(data);
-    });
+  console.log("image message had been sent");
+    let image_buff = await doRequest(options)
+  console.log(image_buff)
+
+  var customVisionApiRequestOptions = {
+    uri: "https://southcentralus.api.cognitive.microsoft.com/customvision/v2.0/Prediction/09776bb1-e376-4557-b2c1-49fc7700eeef/image?iterationId=6554a808-deca-4481-b833-e6f7895b58ed",
+    headers: {
+      "Content-Type": "multipart/application/octet-stream",
+      "Prediction-Key": "1e6c252eef53454ab399198a722d7a6d"
+    },
+    body: image_buff
+  };
+
+  // customVisionApiRequestOptions['body'] = image_buff
+  let tag = ""
+  request.post(customVisionApiRequestOptions, function (error, response, body) {
+    // 結果取得OKの場合
+    console.log("image sent")
+    if (!error && response.statusCode == 200) {
+      console.log(response.body)
+      const CVresult = JSON.parse(response.body)
+      if (CVresult.predictions[0].tagName != "garbagebox") {
+        if (CVresult.predictions[0].probability > 0.5) {
+          tag = "Negative";
+        }
+      } else {
+        if (CVresult.predictions[0].probability > 0.5) {
+          tag = "garbagebox";
+        }
+      }
+      console.log(tag)
+      if (tag == "garbagebox") {
+        client.pushMessage(event.source.userId, [{
+          "text" : 'ごみ箱の写真です！！',
+          "type" : 'text'
+        }])       
+      } else {
+        client.pushMessage(event.source.userId, [{
+          "text" : 'ごみ箱以外の写真です....',
+          "type" : 'text'
+        }])
+      }
+
+
+      // 取得したタグに対応してメッセージをセット
+      // メッセージ送信
+
+      // 結果取得NGの場合
+    } else {
+      console.log("error: " + error);
+    }
   });
-  // request(options, function(error, response, body) {
-  //   if (!error && response.statusCode == 200) {
-  //     // image_buf = body
-  //     image_buf = new Buffer(body)
-  //     console.log('file recieved');
-  //     getObjectName(image_buf.toString('binary'));
-  //   } else {
-  //     console.log(error);
-  //     process.exit(1);
-  //   }
-  // });
+
 }
 
 const addScore = (currentScore, scoreNum) => {
@@ -508,7 +553,7 @@ const chatHandler = async (event) => {
       "text" : 'ご報告ありがとうございます！',
       "type" : 'text'
     },{
-      "text" : 'あなたは現在' + currentUserScore + 'point保有しています。',
+      "text" : 'あなたは現在' + messagedUser.score + 'point保有しています。',
       "type" : 'text'
     }]
     )
@@ -523,7 +568,7 @@ const chatHandler = async (event) => {
       "text" : 'ご報告ありがとうございます！',
       "type" : 'text'
     },{
-      "text" : 'あなたは現在' + currentUserScore + 'point保有しています。',
+      "text" : 'あなたは現在' + messagedUser.score + 'point保有しています。',
       "type" : 'text'
     }]
     )
@@ -570,9 +615,6 @@ const chatHandler = async (event) => {
       console.log("This user doesn't belongs to any trashcan")    
       client.pushMessage(event.source.userId, [{
         "text" : '近くにごみ箱はありません！',
-        "type" : 'text'
-      },{
-        "text" : 'あなたは' + currentUserScore + 'pointあります。',
         "type" : 'text'
       }]
       )

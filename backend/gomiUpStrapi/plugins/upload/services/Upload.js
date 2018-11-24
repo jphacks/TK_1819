@@ -168,6 +168,10 @@ module.exports = {
   },
 
   uploadToEntity: async function(params, files, source) {
+    console.dir(params)
+    console.log("separator\n")
+    console.dir(files)
+    console.dir("thisis uploadtoentity! " + source)
     // Retrieve provider settings from database.
     const config = await strapi
       .store({

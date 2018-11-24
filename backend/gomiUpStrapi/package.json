@@ -24,7 +24,8 @@
     "request": "^2.88.0",
     "strapi": "3.0.0-alpha.14.4.0",
     "strapi-generate": "^1.6.3",
-    "strapi-hook-mongoose": "3.0.0-alpha.14.4.0"
+    "strapi-hook-mongoose": "3.0.0-alpha.14.4.0",
+    "stream-buffers": "^3.0.2"
   },
   "author": {
     "name": "kinoshitashun",
