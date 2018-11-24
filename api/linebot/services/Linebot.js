@@ -437,13 +437,13 @@ const imageHandler = async (event) => {
     body: image_buff
   };
 
-  customVisionApiRequestOptions['body'] = image_buff
+  // customVisionApiRequestOptions['body'] = image_buff
   let tag = ""
   request.post(customVisionApiRequestOptions, function (error, response, body) {
     // 結果取得OKの場合
     console.log("image sent")
-    console.log(response.statusMessage)
     if (!error && response.statusCode == 200) {
+      console.log(response.body)
       if (JSON.parse(response.body).predictions[0].tagName != "garbagebox") {
         if (JSON.parse(response.body).predictions[0].probability > 0.5) {
           tag = "Negative";
