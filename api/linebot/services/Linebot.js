@@ -425,60 +425,8 @@ const imageHandler = async (event) => {
 
 
   console.log("image message had been sent");
-  // var req = http.request(send_options, function(res){
-  //   var data = [];
-  //   console.log("recieved the image");
-  //   res.on('data', function(chunk){
-  //     data.push(new Buffer(chunk));
-  //   }).on('error', function(err){
-  //     console.log(err);
-  //   }).on('end', function(){
-  //     console.log("finished recieving the image");
-  //     console.log(strapi.config.url)
-  //     let files = {}
-  //     files.images = data
-  //     if (strapi.plugins.upload && Object.keys(files).length > 0) {
-  //       // Upload new files and attach them to this entity.
-  //       await strapi.plugins.upload.services.upload.uploadToEntity({
-  //         id: "5bf03a6b0c8ee12e4a869fce",
-  //         model: Trashcan 
-  //       }, files, source);
-  //     }
-  //     // getObjectName(data);
-  //   });
-  // });
-
-  let image_buff = await doRequest(options)
-  // let files = {}
-  // files.images["File"] = image_buf 
+    let image_buff = await doRequest(options)
   console.log(image_buff)
-  // let files = image_buf 
-  // files["path"] = '/tmp/tmp'
-  // if (strapi.plugins.upload && Object.keys(files).length > 0) {
-  //   // Upload new files and attach them to this entity.
-  //   await strapi.plugins.upload.services.upload.uploadToEntity({
-  //     id: "5bf03a6b0c8ee12e4a869fce",
-  //     model: 'trashcan', 
-  //   }, files, null);
-  // }
-
-  // Initialize stream
-  var myReadableStreamBuffer = new streamBuffers.ReadableStreamBuffer({
-    frequency: 10,      // in milliseconds.
-    chunkSize: 2048     // in bytes.
-  }); 
-
-  // With a buffer
-  // myReadableStreamBuffer.put(Buffer.concat(image_buf));
-
-  var formData = {
-    // file: myReadableStreamBuffer,
-    file: escape(image_buff).toString('binary'),
-    // options:{
-    //   contentType:req.file.mimetype,
-    //   filename:"image.jpg"
-    // }
-  };
 
   var customVisionApiRequestOptions = {
     uri: "https://southcentralus.api.cognitive.microsoft.com/customvision/v2.0/Prediction/09776bb1-e376-4557-b2c1-49fc7700eeef/image?iterationId=6554a808-deca-4481-b833-e6f7895b58ed",
@@ -486,10 +434,9 @@ const imageHandler = async (event) => {
       "Content-Type": "multipart/application/octet-stream",
       "Prediction-Key": "1e6c252eef53454ab399198a722d7a6d"
     },
-    // formData: escape(image_buf).toString('binary')
-    // formData: formData
-    // formData: myReadableStreamBuffer
+    body: image_buff
   };
+
   customVisionApiRequestOptions['body'] = image_buff
   let tag = ""
   request.post(customVisionApiRequestOptions, function (error, response, body) {
