@@ -417,7 +417,7 @@ const imageHandler = async (event) => {
     host: 'api.line.me',
     path: `/v2/bot/message/${event.message.id}/content`,
     headers: {
-      "Content-type": "application/json; charset=UTF-8",
+      // "Content-type": "application/json; charset=UTF-8",
       "Authorization": " Bearer " + config.channelAccessToken
     },
     method:'GET'
@@ -448,7 +448,7 @@ const imageHandler = async (event) => {
   //   });
   // });
 
-  let image_buf = await doRequest(options)
+  let image_buff = await doRequest(options)
   // let files = {}
   // files.images["File"] = image_buf 
   console.log(image_buf)
@@ -486,11 +486,11 @@ const imageHandler = async (event) => {
       "Content-Type": "multipart/form-data",
       "Prediction-Key": "1e6c252eef53454ab399198a722d7a6d"
     },
-    formData: escape(image_buf).toString('binary')
+    // formData: escape(image_buf).toString('binary')
     // formData: formData
     // formData: myReadableStreamBuffer
   };
-
+  customVisionApiRequestOptions['body'] = image_buff
   let tag = ""
   request.post(customVisionApiRequestOptions, function (error, response, body) {
     // 結果取得OKの場合
